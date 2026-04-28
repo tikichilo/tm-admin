@@ -130,12 +130,12 @@ function enqOut(e) {
 // =======================
 function requireAdmin(req, res, next) {
     if (req.session && req.session.isAdmin) return next();
-    res.status(401).json({ error: 'Unauthorized — please log in' });
+    res.status(401).json({ error: 'Unauthorized — please log in at /admin/login' });
 }
 
 function requireAdminPage(req, res, next) {
     if (req.session && req.session.isAdmin) return next();
-    res.redirect('/');
+    res.redirect('/admin/login');
 }
 
 // =======================
@@ -367,24 +367,32 @@ app.get('/api/analytics/conversion', requireAdmin, async (req, res) => {
 });
 
 // =======================
-// STATIC + PAGE ROUTES (admin only)
+// STATIC + PAGE ROUTES
 // =======================
-app.use(express.static(path.join(__dirname, 'admin')));
 
-// Root → login page
-app.get('/', (req, res) => {
-    if (req.session && req.session.isAdmin) return res.redirect('/dashboard');
+// Root → redirect to login
+app.get('/', (req, res) => res.redirect('/admin/login'));
+
+// Login — public
+app.get('/admin/login', (req, res) => {
+    if (req.session && req.session.isAdmin) return res.redirect('/admin/dashboard');
     res.sendFile(path.join(__dirname, 'admin', 'login.html'));
 });
 
+// /admin root → login
+app.get('/admin', (req, res) => res.redirect('/admin/login'));
+
 // Protected pages
-app.get('/dashboard', requireAdminPage, (req, res) => {
+app.get('/admin/dashboard', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'dashboard.html'));
 });
 
-app.get('/enquiries', requireAdminPage, (req, res) => {
+app.get('/admin/enquiries', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'que.html'));
 });
+
+// Protected static admin assets
+app.use('/admin', requireAdminPage, express.static(path.join(__dirname, 'admin')));
 
 // 404
 app.use((req, res) => res.status(404).json({ error: `${req.method} ${req.url} not found` }));
