@@ -19,12 +19,12 @@ if (!process.env.MONGO_URI) {
     console.error("❌ Missing MONGO_URI");
     process.exit(1);
 }
-if (!process.env.SESSION_SECRET) {
-    console.error("❌ Missing SESSION_SECRET in .env");
-    process.exit(1);
-}
 if (!process.env.ADMIN_CODE) {
     console.error("❌ Missing ADMIN_CODE in .env");
+    process.exit(1);
+}
+if (!process.env.SESSION_SECRET) {
+    console.error("❌ Missing SESSION_SECRET in .env");
     process.exit(1);
 }
 
@@ -130,12 +130,12 @@ function enqOut(e) {
 // =======================
 function requireAdmin(req, res, next) {
     if (req.session && req.session.isAdmin) return next();
-    res.status(401).json({ error: 'Unauthorized — please log in at /login' });
+    res.status(401).json({ error: 'Unauthorized — please log in' });
 }
 
 function requireAdminPage(req, res, next) {
     if (req.session && req.session.isAdmin) return next();
-    res.redirect('/login');
+    res.redirect('/');
 }
 
 // =======================
@@ -371,13 +371,8 @@ app.get('/api/analytics/conversion', requireAdmin, async (req, res) => {
 // =======================
 app.use(express.static(path.join(__dirname, 'admin')));
 
-// Root → login
+// Root → login page
 app.get('/', (req, res) => {
-    if (req.session && req.session.isAdmin) return res.redirect('/dashboard');
-    res.sendFile(path.join(__dirname, 'admin', 'login.html'));
-});
-
-app.get('/login', (req, res) => {
     if (req.session && req.session.isAdmin) return res.redirect('/dashboard');
     res.sendFile(path.join(__dirname, 'admin', 'login.html'));
 });
