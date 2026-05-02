@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const session = require('express-session');
+const cloudinary = require('cloudinary').v2;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,59 @@ if (!process.env.ADMIN_CODE) {
 if (!process.env.SESSION_SECRET) {
     console.error("❌ Missing SESSION_SECRET in .env");
     process.exit(1);
+}
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    console.error("❌ Missing Cloudinary env vars");
+    process.exit(1);
+}
+
+// =======================
+// CLOUDINARY CONFIG
+// =======================
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:    process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Upload a single base64 or URL image to Cloudinary
+async function uploadImage(imageStr) {
+    // If it's already a Cloudinary URL, skip uploading
+    if (imageStr && imageStr.includes('res.cloudinary.com')) return imageStr;
+    const result = await cloudinary.uploader.upload(imageStr, {
+        folder: 'tmmotors',
+        resource_type: 'image',
+    });
+    return result.secure_url;
+}
+
+// Upload an array of images, skip any that fail
+async function uploadImages(imagesArr) {
+    const results = [];
+    for (const img of imagesArr) {
+        try {
+            const url = await uploadImage(img);
+            results.push(url);
+        } catch (err) {
+            console.error('⚠️ Image upload failed, skipping:', err.message);
+        }
+    }
+    return results;
+}
+
+// Delete a Cloudinary image by its URL
+async function deleteCloudinaryImage(imageUrl) {
+    try {
+        if (!imageUrl || !imageUrl.includes('res.cloudinary.com')) return;
+        // Extract public_id from URL e.g. tmmotors/abc123
+        const parts = imageUrl.split('/');
+        const filename = parts[parts.length - 1].split('.')[0];
+        const folder = parts[parts.length - 2];
+        const publicId = `${folder}/${filename}`;
+        await cloudinary.uploader.destroy(publicId);
+    } catch (err) {
+        console.error('⚠️ Cloudinary delete failed:', err.message);
+    }
 }
 
 // =======================
@@ -71,9 +125,18 @@ const loginLimiter = rateLimit({
 // =======================
 // DATABASE
 // =======================
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('✅ MongoDB connected'))
-    .catch(err => { console.error('❌ MongoDB error:', err.message); process.exit(1); });
+mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+    heartbeatFrequencyMS: 10000,
+})
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => { console.error('❌ MongoDB error:', err.message); process.exit(1); });
+
+mongoose.connection.on('disconnected', () => console.warn('⚠️ MongoDB disconnected. Reconnecting...'));
+mongoose.connection.on('reconnected',  () => console.log('✅ MongoDB reconnected'));
+mongoose.connection.on('error',        (err) => console.error('❌ MongoDB error:', err.message));
 
 // =======================
 // SCHEMAS
@@ -86,8 +149,8 @@ const carSchema = new mongoose.Schema({
     mileage:     Number,
     color:       String,
     description: String,
-    image:       String,
-    images:      [String],
+    image:       String,   // Cloudinary URL
+    images:      [String], // Cloudinary URLs
     status:      { type: String, default: 'available' },
     soldDate:    String,
     createdAt:   { type: String, default: () => new Date().toISOString() }
@@ -139,11 +202,10 @@ function requireAdminPage(req, res, next) {
 }
 
 // =======================
-// cron check
+// HEALTH CHECK (cron ping)
 // =======================
 app.get('/health', async (req, res) => {
     const state = mongoose.connection.readyState;
-    // 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
     if (state === 1) {
         res.status(200).json({ status: 'ok', db: 'connected' });
     } else {
@@ -204,17 +266,25 @@ app.post('/api/cars', requireAdmin, async (req, res) => {
         const { make, model, year, price, mileage, color, description, image, images } = req.body;
         if (!make || !model || !price) return res.status(400).json({ error: "Make, model, price required" });
 
-        let imgs = [];
-        if (Array.isArray(images) && images.length) imgs = images.slice(0, 10);
-        else if (image) imgs = [image];
+        // Collect raw images (base64 or URLs)
+        let rawImgs = [];
+        if (Array.isArray(images) && images.length) rawImgs = images.slice(0, 10);
+        else if (image) rawImgs = [image];
+
+        // Upload all to Cloudinary
+        console.log(`⬆️  Uploading ${rawImgs.length} image(s) to Cloudinary...`);
+        const uploadedImgs = await uploadImages(rawImgs);
+        console.log(`✅ Uploaded ${uploadedImgs.length} image(s)`);
 
         const car = await new Car({
             make: make.trim(), model: model.trim(),
-            year: year ? Number(year) : null,
-            price: Number(price),
-            mileage: mileage ? Number(mileage) : null,
-            color: color || null, description: description || null,
-            image: imgs[0] || null, images: imgs
+            year:     year     ? Number(year)    : null,
+            price:    Number(price),
+            mileage:  mileage  ? Number(mileage) : null,
+            color:       color       || null,
+            description: description || null,
+            image:    uploadedImgs[0] || null,
+            images:   uploadedImgs
         }).save();
 
         res.status(201).json({ success: true, ...carOut(car) });
@@ -227,18 +297,23 @@ app.post('/api/cars', requireAdmin, async (req, res) => {
 app.put('/api/cars/:id', requireAdmin, async (req, res) => {
     try {
         const { make, model, year, price, mileage, color, description, image, images } = req.body;
-        let imgs = [];
-        if (Array.isArray(images) && images.length) imgs = images.slice(0, 10);
-        else if (image) imgs = [image];
+
+        let rawImgs = [];
+        if (Array.isArray(images) && images.length) rawImgs = images.slice(0, 10);
+        else if (image) rawImgs = [image];
+
+        // Upload only new base64 images; keep existing Cloudinary URLs as-is
+        console.log(`⬆️  Uploading updated image(s) to Cloudinary...`);
+        const uploadedImgs = await uploadImages(rawImgs);
 
         await Car.findByIdAndUpdate(req.params.id, {
             make, model,
-            year: year ? Number(year) : null,
-            price: Number(price),
-            mileage: mileage ? Number(mileage) : null,
+            year:     year    ? Number(year)    : null,
+            price:    Number(price),
+            mileage:  mileage ? Number(mileage) : null,
             color, description,
-            image: imgs[0] || null,
-            images: imgs
+            image:  uploadedImgs[0] || null,
+            images: uploadedImgs
         });
         res.json({ success: true });
     } catch (err) {
@@ -248,6 +323,13 @@ app.put('/api/cars/:id', requireAdmin, async (req, res) => {
 
 app.delete('/api/cars/:id', requireAdmin, async (req, res) => {
     try {
+        // Delete images from Cloudinary before removing from DB
+        const car = await Car.findById(req.params.id);
+        if (car && car.images && car.images.length) {
+            for (const imgUrl of car.images) {
+                await deleteCloudinaryImage(imgUrl);
+            }
+        }
         await Car.findByIdAndDelete(req.params.id);
         res.json({ success: true });
     } catch (err) {
@@ -291,8 +373,10 @@ app.post('/api/enquiries', async (req, res) => {
         if (!name) return res.status(400).json({ error: "Name is required" });
 
         const enquiry = await new Enquiry({
-            carId: carId || null, carMake: carMake || null,
-            carModel: carModel || null, carYear: carYear || null,
+            carId:    carId    || null,
+            carMake:  carMake  || null,
+            carModel: carModel || null,
+            carYear:  carYear  || null,
             name, phone: phone || null, email: email || null,
             message: message || null, status: 'new'
         }).save();
@@ -382,20 +466,15 @@ app.get('/api/analytics/conversion', requireAdmin, async (req, res) => {
 // =======================
 // STATIC + PAGE ROUTES
 // =======================
-
-// Root → redirect to login
 app.get('/', (req, res) => res.redirect('/admin/login'));
 
-// Login — public
 app.get('/admin/login', (req, res) => {
     if (req.session && req.session.isAdmin) return res.redirect('/admin/dashboard');
     res.sendFile(path.join(__dirname, 'admin', 'login.html'));
 });
 
-// /admin root → login
 app.get('/admin', (req, res) => res.redirect('/admin/login'));
 
-// Protected pages
 app.get('/admin/dashboard', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'dashboard.html'));
 });
@@ -404,10 +483,8 @@ app.get('/admin/enquiries', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'que.html'));
 });
 
-// Protected static admin assets
 app.use('/admin', requireAdminPage, express.static(path.join(__dirname, 'admin')));
 
-// 404
 app.use((req, res) => res.status(404).json({ error: `${req.method} ${req.url} not found` }));
 
 app.listen(PORT, () => console.log(`🚗 T&M Admin running on http://localhost:${PORT}`));
