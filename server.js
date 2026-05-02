@@ -139,6 +139,19 @@ function requireAdminPage(req, res, next) {
 }
 
 // =======================
+// cron check
+// =======================
+app.get('/health', async (req, res) => {
+    const state = mongoose.connection.readyState;
+    // 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
+    if (state === 1) {
+        res.status(200).json({ status: 'ok', db: 'connected' });
+    } else {
+        res.status(503).json({ status: 'error', db: 'disconnected' });
+    }
+});
+
+// =======================
 // AUTH ROUTES
 // =======================
 app.post('/api/admin/login', loginLimiter, (req, res) => {
