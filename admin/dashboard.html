@@ -487,7 +487,7 @@ function navigate(pg){
   if(pg==='dashboard') loadDashboard();
   if(pg==='inventory') loadInventory();
   if(pg==='sold') loadSold();
-  closeSidebar(); // always close sidebar on mobile nav
+  closeSidebar();
 }
 async function loadAll(){await Promise.all([loadStats(),loadInventory(),loadSold()]);}
 
@@ -623,23 +623,36 @@ function removeImg(idx,type){
   renderPreviews(type);
 }
 
-// ADD CAR
+// ── HELPER: safely read a field value (fixes iOS Safari focus commit issue)
+function val(id){ return (document.getElementById(id).value || '').trim(); }
+function numVal(id){ const v=val(id); return v ? Number(v) : null; }
+
+// ADD CAR — iOS Safari fix
 async function submitCar(){
-  const make=document.getElementById('f-make').value.trim();
-  const model=document.getElementById('f-model').value.trim();
-  const price=document.getElementById('f-price').value;
+  // Blur all inputs first so iOS Safari commits any in-progress edits
+  document.querySelectorAll('#page-add-car .form-control').forEach(el=>el.blur());
+  // Small delay to let iOS finish committing field values
+  await new Promise(r=>setTimeout(r,80));
+
+  const make  = val('f-make');
+  const model = val('f-model');
+  const price = val('f-price');
+
   if(!make||!model||!price){toast('Make, model, price required','error');return;}
+
   const btn=document.getElementById('submit-btn');
   btn.textContent='⏳ Saving...';btn.disabled=true;
+
   try{
     const body={
-      make,model,
-      year:parseInt(document.getElementById('f-year').value)||null,
-      price:parseInt(price),
-      mileage:parseInt(document.getElementById('f-mileage').value)||null,
-      color:document.getElementById('f-color').value.trim(),
-      description:document.getElementById('f-desc').value.trim(),
-      images:addImages,image:addImages[0]||null
+      make, model,
+      year:        numVal('f-year'),
+      price:       Number(price),
+      mileage:     numVal('f-mileage'),
+      color:       val('f-color'),
+      description: val('f-desc'),
+      images:      addImages,
+      image:       addImages[0]||null
     };
     const r=await fetch(`${API}/cars`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const d=await r.json();
@@ -649,6 +662,7 @@ async function submitCar(){
   }catch(e){toast(e.message||'Failed','error');}
   finally{btn.textContent='🚗 Add to Inventory';btn.disabled=false;}
 }
+
 function clearAddForm(){
   ['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'].forEach(id=>document.getElementById(id).value='');
   addImages=[];renderPreviews('add');
@@ -673,18 +687,29 @@ async function openEdit(id){
     openModal('edit-modal');
   }catch(e){toast('Failed to load car','error');}
 }
+
+// SAVE EDIT — iOS Safari fix
 async function saveEdit(){
-  const id=document.getElementById('edit-id').value;
+  // Blur all inputs first so iOS Safari commits any in-progress edits
+  document.querySelectorAll('#edit-modal .form-control').forEach(el=>el.blur());
+  // Small delay to let iOS finish committing field values
+  await new Promise(r=>setTimeout(r,80));
+
+  const id    = document.getElementById('edit-id').value;
+  const price = val('e-price');
+
   const body={
-    make:document.getElementById('e-make').value.trim(),
-    model:document.getElementById('e-model').value.trim(),
-    year:parseInt(document.getElementById('e-year').value)||null,
-    color:document.getElementById('e-color').value.trim(),
-    price:parseInt(document.getElementById('e-price').value),
-    mileage:parseInt(document.getElementById('e-mileage').value)||null,
-    description:document.getElementById('e-desc').value.trim(),
-    images:editImages,image:editImages[0]||null
+    make:        val('e-make'),
+    model:       val('e-model'),
+    year:        numVal('e-year'),
+    color:       val('e-color'),
+    price:       Number(price),
+    mileage:     numVal('e-mileage'),
+    description: val('e-desc'),
+    images:      editImages,
+    image:       editImages[0]||null
   };
+
   try{
     const r=await fetch(`${API}/cars/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!r.ok) throw new Error('Update failed');
