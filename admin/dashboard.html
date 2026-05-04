@@ -18,8 +18,6 @@
   body{font-family:'Montserrat',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;}
   body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(245,184,0,0.07) 0%,transparent 60%);}
   .app{display:flex;min-height:100vh;position:relative;z-index:1;}
-
-  /* ─── SIDEBAR ─── */
   .sidebar{width:260px;min-height:100vh;background:var(--dark-2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform var(--tr);}
   .sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;}
   .logo-icon{width:44px;height:44px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 20px rgba(245,184,0,0.3);flex-shrink:0;}
@@ -34,15 +32,9 @@
   .nav-item.active .nav-icon{background:var(--gold-glow);}
   .nav-badge{margin-left:auto;background:var(--gold);color:var(--dark);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;min-width:22px;text-align:center;}
   .sidebar-footer{padding:20px 24px;border-top:1px solid var(--border);font-size:10px;color:var(--text-dim);}
-
-  /* ─── SIDEBAR OVERLAY (mobile backdrop) ─── */
   .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99;backdrop-filter:blur(2px);}
   .sidebar-overlay.open{display:block;}
-
-  /* ─── MAIN ─── */
   .main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-width:0;}
-
-  /* ─── TOPBAR ─── */
   .topbar{height:70px;background:var(--dark-2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:50;}
   .topbar-left{display:flex;align-items:center;gap:12px;}
   .topbar-left h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
@@ -55,20 +47,14 @@
   .btn-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:var(--tr);}
   .btn-icon:hover{border-color:var(--gold);color:var(--gold);}
   .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);border:2px solid var(--gold-dim);flex-shrink:0;}
-
-  /* hamburger — hidden on desktop */
   .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);cursor:pointer;flex-shrink:0;}
   .hamburger span{display:block;width:18px;height:2px;background:var(--text-muted);border-radius:2px;transition:var(--tr);}
   .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
   .hamburger.open span:nth-child(2){opacity:0;}
   .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-
-  /* ─── PAGES ─── */
   .page{display:none;padding:32px;animation:fadeIn .4s ease;}
   .page.active{display:block;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-  /* ─── STATS GRID ─── */
   .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px;}
   .stat-card{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;position:relative;overflow:hidden;transition:var(--tr);}
   .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent);}
@@ -78,13 +64,9 @@
   .stat-card .value.gold{color:var(--gold);}
   .stat-card .sub{font-size:11px;color:var(--text-muted);}
   .stat-card .icon{position:absolute;top:20px;right:20px;font-size:28px;opacity:.15;}
-
-  /* ─── SECTION HEADER ─── */
   .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
   .section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
   .section-title span{color:var(--gold);}
-
-  /* ─── BUTTONS ─── */
   .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:600;font-family:'Montserrat',sans-serif;cursor:pointer;letter-spacing:.05em;transition:var(--tr);border:none;}
   .btn-gold{background:linear-gradient(135deg,var(--gold),#E8A800);color:var(--dark);box-shadow:0 4px 20px rgba(245,184,0,.3);}
   .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(245,184,0,.45);}
@@ -93,8 +75,6 @@
   .btn-danger{background:rgba(224,85,85,.15);color:var(--danger);border:1px solid rgba(224,85,85,.3);}
   .btn-danger:hover{background:rgba(224,85,85,.25);}
   .btn-sm{padding:6px 12px;font-size:11px;}
-
-  /* ─── TABLE ─── */
   .table-wrap{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
   .table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
   .chip{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text-muted);background:var(--dark-3);transition:var(--tr);}
@@ -115,8 +95,6 @@
   .badge-sold{background:rgba(224,85,85,.12);color:var(--danger);border:1px solid rgba(224,85,85,.25);}
   .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
   .action-btns{display:flex;gap:6px;flex-wrap:wrap;}
-
-  /* ─── FORM ─── */
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   .form-group{display:flex;flex-direction:column;gap:8px;}
   .form-group.full{grid-column:1/-1;}
@@ -124,11 +102,10 @@
   .form-control{background:var(--dark-3);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--text);font-family:'Montserrat',sans-serif;transition:var(--tr);outline:none;width:100%;}
   .form-control:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
   .form-control::placeholder{color:var(--text-dim);}
+  .form-control.captured{border-color:var(--success)!important;box-shadow:0 0 0 3px rgba(76,175,130,0.15)!important;transition:border-color 0.1s,box-shadow 0.1s;}
   textarea.form-control{resize:vertical;min-height:100px;}
   .form-card{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;}
   .form-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);}
-
-  /* ─── IMAGE UPLOAD ─── */
   .upload-zone{border:2px dashed var(--border-bright);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;transition:var(--tr);background:var(--dark-3);position:relative;}
   .upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:var(--gold-glow);}
   .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
@@ -141,8 +118,6 @@
   .img-primary-badge{position:absolute;top:4px;left:4px;background:var(--gold);color:var(--dark);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;pointer-events:none;}
   .img-remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(224,85,85,.9);border-radius:50%;border:none;color:#fff;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;line-height:1;}
   .img-count-text{font-size:11px;color:var(--text-muted);margin-top:8px;}
-
-  /* ─── DASHBOARD BOTTOM ─── */
   .dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;}
   .dash-card{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;}
   .dash-card-title{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:20px;}
@@ -162,8 +137,6 @@
   .empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);}
   .empty-state .empty-icon{font-size:48px;margin-bottom:16px;opacity:.4;}
   .empty-state p{font-size:14px;}
-
-  /* ─── MODAL ─── */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:16px;}
   .modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
   .modal{background:var(--dark-2);border:1px solid var(--border-bright);border-radius:var(--radius-lg);width:560px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.6);}
@@ -173,126 +146,38 @@
   .modal-close:hover{color:var(--danger);border-color:var(--danger);}
   .modal-body{padding:24px 28px;}
   .modal-footer{padding:16px 28px 24px;display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;}
-
-  /* ─── TOAST ─── */
   .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:10px;}
   .toast{background:var(--dark-3);border:1px solid var(--border-bright);border-radius:10px;padding:14px 20px;font-size:13px;font-weight:500;color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;min-width:260px;}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:var(--dark-5);border-radius:3px;}
-
-  /* ════════════════════════════════════════
-     RESPONSIVE BREAKPOINTS
-     ════════════════════════════════════════ */
-
-  /* ── 1100px: 2-col stats, single-col dash bottom ── */
-  @media(max-width:1100px){
-    .stats-grid{grid-template-columns:repeat(2,1fr);}
-    .dash-bottom{grid-template-columns:1fr;}
-  }
-
-  /* ── 900px: narrow sidebar ── */
-  @media(max-width:900px){
-    .sidebar{width:220px;}
-    .main{margin-left:220px;}
-  }
-
-  /* ── 768px: mobile layout ── */
+  @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr);}.dash-bottom{grid-template-columns:1fr;}}
+  @media(max-width:900px){.sidebar{width:220px;}.main{margin-left:220px;}}
   @media(max-width:768px){
-    /* Sidebar becomes a slide-in drawer */
-    .sidebar{
-      transform:translateX(-100%);
-      width:280px;
-      z-index:200;
-    }
-    .sidebar.open{transform:translateX(0);}
-
-    /* Main takes full width */
-    .main{margin-left:0;}
-
-    /* Topbar adjustments */
-    .topbar{padding:0 16px;height:60px;}
-    .topbar-left h1{font-size:18px;}
-    .topbar-left p{display:none;} /* hide subtitle on mobile */
-    .topbar-right .search-box{display:none;} /* hide search bar, use in-page search */
-    .hamburger{display:flex;}
-
-    /* Pages */
-    .page{padding:16px;}
-
-    /* Stats: 2 columns on mobile */
-    .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
-    .stat-card{padding:16px;}
-    .stat-card .value{font-size:28px;}
-    .stat-card .icon{font-size:22px;}
-
-    /* Dashboard bottom cards */
-    .dash-bottom{gap:12px;margin-top:12px;}
-    .dash-card{padding:16px;}
-
-    /* Section header */
-    .section-header{margin-bottom:14px;}
-
-    /* Table: horizontal scroll on small screens */
-    .table-wrap{border-radius:var(--radius);overflow-x:auto;-webkit-overflow-scrolling:touch;}
-    .table-toolbar{padding:12px 14px;gap:8px;}
-    .table-toolbar .search-box{width:100%;} /* take full width in toolbar */
-    thead th{padding:10px 14px;white-space:nowrap;}
-    tbody td{padding:12px 14px;white-space:nowrap;}
-    .action-btns{flex-direction:column;gap:4px;}
-    .action-btns .btn-sm{width:100%;justify-content:center;}
-
-    /* Form */
-    .form-card{padding:16px;margin-bottom:16px;}
-    .form-grid{grid-template-columns:1fr;gap:14px;}
-    .form-group.full{grid-column:1;}
-
-    /* Image preview */
+    .sidebar{transform:translateX(-100%);width:280px;z-index:200;}.sidebar.open{transform:translateX(0);}
+    .main{margin-left:0;}.topbar{padding:0 16px;height:60px;}.topbar-left h1{font-size:18px;}.topbar-left p{display:none;}.topbar-right .search-box{display:none;}.hamburger{display:flex;}
+    .page{padding:16px;}.stats-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}.stat-card{padding:16px;}.stat-card .value{font-size:28px;}.stat-card .icon{font-size:22px;}
+    .dash-bottom{gap:12px;margin-top:12px;}.dash-card{padding:16px;}.section-header{margin-bottom:14px;}
+    .table-wrap{border-radius:var(--radius);overflow-x:auto;-webkit-overflow-scrolling:touch;}.table-toolbar{padding:12px 14px;gap:8px;}.table-toolbar .search-box{width:100%;}
+    thead th{padding:10px 14px;white-space:nowrap;}tbody td{padding:12px 14px;white-space:nowrap;}
+    .action-btns{flex-direction:column;gap:4px;}.action-btns .btn-sm{width:100%;justify-content:center;}
+    .form-card{padding:16px;margin-bottom:16px;}.form-grid{grid-template-columns:1fr;gap:14px;}.form-group.full{grid-column:1;}
     .img-preview-grid{grid-template-columns:repeat(3,1fr);}
-
-    /* Modal */
-    .modal-overlay{padding:12px;align-items:flex-end;}
-    .modal{
-      width:100%;
-      max-height:85vh;
-      border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-    }
-    .modal-header{padding:20px 20px 14px;}
-    .modal-body{padding:16px 20px;}
-    .modal-footer{padding:12px 20px 20px;}
-    /* Edit modal inner form */
+    .modal-overlay{padding:12px;align-items:flex-end;}.modal{width:100%;max-height:85vh;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+    .modal-header{padding:20px 20px 14px;}.modal-body{padding:16px 20px;}.modal-footer{padding:12px 20px 20px;}
     #edit-modal .form-grid{grid-template-columns:1fr;}
-
-    /* Toast */
-    .toast-wrap{left:16px;right:16px;bottom:16px;}
-    .toast{min-width:unset;width:100%;}
-
-    /* Add car submit buttons */
-    #page-add-car > div:last-child{flex-direction:column;}
-    #page-add-car > div:last-child .btn{width:100%;justify-content:center;}
+    .toast-wrap{left:16px;right:16px;bottom:16px;}.toast{min-width:unset;width:100%;}
+    #page-add-car > div:last-child{flex-direction:column;}#page-add-car > div:last-child .btn{width:100%;justify-content:center;}
   }
-
-  /* ── 480px: single-col stats on very small phones ── */
-  @media(max-width:480px){
-    .stats-grid{grid-template-columns:1fr;}
-    .stat-card .value{font-size:32px;}
-    .img-preview-grid{grid-template-columns:repeat(2,1fr);}
-    .topbar-left h1{font-size:16px;}
-  }
+  @media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.stat-card .value{font-size:32px;}.img-preview-grid{grid-template-columns:repeat(2,1fr);}.topbar-left h1{font-size:16px;}}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- Mobile sidebar backdrop -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon"><img src="123456.png" alt="T&M Motors Logo" style="width:100%;height:100%;object-fit:contain;"></div>
-      <div class="logo-text">
-        <div class="brand">T&M Motors</div>
-        <div class="tagline">Command Centre</div>
-      </div>
+      <div class="logo-text"><div class="brand">T&M Motors</div><div class="tagline">Command Centre</div></div>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-label">Main</div>
@@ -305,18 +190,11 @@
     </nav>
     <div class="sidebar-footer">T&M Command Centre v2.0</div>
   </aside>
-
   <main class="main">
     <div class="topbar">
       <div class="topbar-left">
-        <!-- Hamburger only shows on mobile via CSS -->
-        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
-          <span></span><span></span><span></span>
-        </button>
-        <div>
-          <h1 id="page-title">Dashboard</h1>
-          <p id="page-sub">Welcome back — here's your fleet overview</p>
-        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+        <div><h1 id="page-title">Dashboard</h1><p id="page-sub">Welcome back — here's your fleet overview</p></div>
       </div>
       <div class="topbar-right">
         <div class="search-box"><span>🔍</span><input type="text" id="global-search" placeholder="Search cars..." oninput="handleGlobalSearch(this.value)"/></div>
@@ -373,13 +251,21 @@
       <div class="form-card">
         <div class="form-card-title">Vehicle Details</div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Make *</label><input class="form-control" id="f-make" type="text" placeholder="e.g. Toyota"/></div>
-          <div class="form-group"><label class="form-label">Model *</label><input class="form-control" id="f-model" type="text" placeholder="e.g. Land Cruiser"/></div>
-          <div class="form-group"><label class="form-label">Year</label><input class="form-control" id="f-year" type="number" placeholder="e.g. 2022"/></div>
-          <div class="form-group"><label class="form-label">Colour</label><input class="form-control" id="f-color" type="text" placeholder="e.g. Pearl White"/></div>
-          <div class="form-group"><label class="form-label">Price (ZMW) *</label><input class="form-control" id="f-price" type="number" placeholder="e.g. 450000"/></div>
-          <div class="form-group"><label class="form-label">Mileage (km)</label><input class="form-control" id="f-mileage" type="number" placeholder="e.g. 35000"/></div>
-          <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="f-desc" placeholder="Full service history, one owner, immaculate condition..."></textarea></div>
+          <div class="form-group"><label class="form-label">Make *</label>
+            <input class="form-control" id="f-make" type="text" placeholder="e.g. Toyota" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
+          <div class="form-group"><label class="form-label">Model *</label>
+            <input class="form-control" id="f-model" type="text" placeholder="e.g. Land Cruiser" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
+          <div class="form-group"><label class="form-label">Year</label>
+            <!-- type=text + inputmode=numeric avoids iOS number-input focus-commit bug -->
+            <input class="form-control" id="f-year" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 2022"/></div>
+          <div class="form-group"><label class="form-label">Colour</label>
+            <input class="form-control" id="f-color" type="text" placeholder="e.g. Pearl White" autocomplete="off" autocorrect="off"/></div>
+          <div class="form-group"><label class="form-label">Price (ZMW) *</label>
+            <input class="form-control" id="f-price" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 450000"/></div>
+          <div class="form-group"><label class="form-label">Mileage (km)</label>
+            <input class="form-control" id="f-mileage" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 35000"/></div>
+          <div class="form-group full"><label class="form-label">Description</label>
+            <textarea class="form-control" id="f-desc" placeholder="Full service history, one owner, immaculate condition..."></textarea></div>
         </div>
       </div>
       <div class="form-card">
@@ -407,12 +293,12 @@
     <div class="modal-body">
       <input type="hidden" id="edit-id"/>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Make</label><input class="form-control" id="e-make" type="text"/></div>
-        <div class="form-group"><label class="form-label">Model</label><input class="form-control" id="e-model" type="text"/></div>
-        <div class="form-group"><label class="form-label">Year</label><input class="form-control" id="e-year" type="number"/></div>
-        <div class="form-group"><label class="form-label">Colour</label><input class="form-control" id="e-color" type="text"/></div>
-        <div class="form-group"><label class="form-label">Price (ZMW)</label><input class="form-control" id="e-price" type="number"/></div>
-        <div class="form-group"><label class="form-label">Mileage (km)</label><input class="form-control" id="e-mileage" type="number"/></div>
+        <div class="form-group"><label class="form-label">Make</label><input class="form-control" id="e-make" type="text" autocomplete="off" autocorrect="off" spellcheck="false"/></div>
+        <div class="form-group"><label class="form-label">Model</label><input class="form-control" id="e-model" type="text" autocomplete="off" autocorrect="off" spellcheck="false"/></div>
+        <div class="form-group"><label class="form-label">Year</label><input class="form-control" id="e-year" type="text" inputmode="numeric" pattern="[0-9]*"/></div>
+        <div class="form-group"><label class="form-label">Colour</label><input class="form-control" id="e-color" type="text" autocomplete="off" autocorrect="off"/></div>
+        <div class="form-group"><label class="form-label">Price (ZMW)</label><input class="form-control" id="e-price" type="text" inputmode="numeric" pattern="[0-9]*"/></div>
+        <div class="form-group"><label class="form-label">Mileage (km)</label><input class="form-control" id="e-mileage" type="text" inputmode="numeric" pattern="[0-9]*"/></div>
         <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="e-desc"></textarea></div>
       </div>
       <div style="margin-top:16px;">
@@ -447,19 +333,91 @@
 <div class="toast-wrap" id="toasts"></div>
 
 <script>
-const API = '/api';
-let allCars = [], soldCars = [];
-let addImages = [], editImages = [];
+/* ═══════════════════════════════════════════════════════════════
+   iOS SAFARI AGGRESSIVE FIELD-READ SYSTEM  (v3)
+   ═══════════════════════════════════════════════════════════════
+   Root cause: iOS Safari does not commit a field's typed value
+   to element.value until that field loses focus.  Number inputs
+   are the worst offenders.  Two additional root causes fixed here:
 
-/* ── SIDEBAR TOGGLE (mobile) ── */
+   FIX A — type="text" + inputmode="numeric"
+     All numeric fields are now type="text" so iOS never withholds
+     the value waiting for a number-keyboard dismiss.
+
+   FIX B — 3-layer aggressive read
+     Layer 1: live keystroke snapshot (_snap{}) — saved on every
+              input/change/keyup/paste so we always have the latest
+              value the user typed, even if iOS hasn't committed it.
+     Layer 2: force-blur every input on the page, giving iOS the
+              signal to flush its pending value commits.
+     Layer 3: wait 150 ms, then re-read all fields post-blur.
+     Merge:   post-blur value  →  pre-blur snapshot  →  keystroke
+              snapshot  →  ''  (take the first non-empty one).
+
+   FIX C — green flash on captured required fields
+     When the button is tapped, each required field that was
+     successfully read flashes green so the user can visually
+     confirm their values were captured.
+   ═══════════════════════════════════════════════════════════════ */
+
+const _snap = {};
+
+function _initSnapshots() {
+  document.querySelectorAll('.form-control').forEach(_attachSnap);
+  new MutationObserver(muts => {
+    muts.forEach(m => m.addedNodes.forEach(n => {
+      if (n.querySelectorAll) n.querySelectorAll('.form-control').forEach(_attachSnap);
+    }));
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
+function _attachSnap(el) {
+  if (!el.id || el._snapAttached) return;
+  el._snapAttached = true;
+  const save = () => { const v = el.value; if (v !== undefined) _snap[el.id] = v; };
+  ['input','change','keyup','keydown','paste','compositionend'].forEach(ev =>
+    el.addEventListener(ev, save, { passive: true })
+  );
+}
+
+async function _safeRead(ids) {
+  // Layer 1 — snapshot before anything changes
+  const pre = {};
+  ids.forEach(id => { const el = document.getElementById(id); pre[id] = el ? el.value : ''; });
+
+  // Layer 2 — force-blur everything
+  document.querySelectorAll('input, select, textarea').forEach(el => { try { el.blur(); } catch(e){} });
+  try { if (document.activeElement) document.activeElement.blur(); } catch(e){}
+
+  // Layer 3 — wait then re-read
+  await new Promise(r => setTimeout(r, 150));
+
+  const post = {};
+  ids.forEach(id => { const el = document.getElementById(id); post[id] = el ? el.value : ''; });
+
+  // Merge layers
+  const out = {};
+  ids.forEach(id => {
+    out[id] = ((post[id]||'').trim() || (pre[id]||'').trim() || (_snap[id]||'').trim()).trim();
+  });
+  return out;
+}
+
+function _flashGreen(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('captured');
+  setTimeout(() => el.classList.remove('captured'), 900);
+}
+
+function _stripNonNumeric(v) { return v ? v.replace(/[^0-9.]/g, '') : ''; }
+
+/* ── SIDEBAR ── */
 function toggleSidebar(){
-  const sb=document.getElementById('sidebar');
-  const ov=document.getElementById('sidebar-overlay');
-  const hb=document.getElementById('hamburger');
-  const isOpen=sb.classList.toggle('open');
-  ov.classList.toggle('open',isOpen);
-  hb.classList.toggle('open',isOpen);
-  document.body.style.overflow=isOpen?'hidden':'';
+  const sb=document.getElementById('sidebar'),ov=document.getElementById('sidebar-overlay'),hb=document.getElementById('hamburger');
+  const o=sb.classList.toggle('open');
+  ov.classList.toggle('open',o);hb.classList.toggle('open',o);
+  document.body.style.overflow=o?'hidden':'';
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
@@ -468,34 +426,36 @@ function closeSidebar(){
   document.body.style.overflow='';
 }
 
-// NAV
-const pageMeta = {
+const API='/api';
+let allCars=[],soldCars=[],addImages=[],editImages=[];
+
+const pageMeta={
   dashboard:{title:'Dashboard',sub:"Welcome back — here's your fleet overview"},
   inventory:{title:'Inventory',sub:'Manage your available stock'},
   sold:{title:'Sold Cars',sub:'All closed deals and revenue'},
   'add-car':{title:'Add Vehicle',sub:'List a new car to your inventory'}
 };
+
 function navigate(pg){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+pg).classList.add('active');
   const el=document.querySelector(`.nav-item[onclick="navigate('${pg}')"]`);
-  if(el) el.classList.add('active');
+  if(el)el.classList.add('active');
   const m=pageMeta[pg]||{};
   document.getElementById('page-title').textContent=m.title||pg;
   document.getElementById('page-sub').textContent=m.sub||'';
-  if(pg==='dashboard') loadDashboard();
-  if(pg==='inventory') loadInventory();
-  if(pg==='sold') loadSold();
+  if(pg==='dashboard')loadDashboard();
+  if(pg==='inventory')loadInventory();
+  if(pg==='sold')loadSold();
   closeSidebar();
 }
 async function loadAll(){await Promise.all([loadStats(),loadInventory(),loadSold()]);}
 
-// STATS
 async function loadStats(){
   try{
     const[sr,ar]=await Promise.all([fetch(`${API}/sold`),fetch(`${API}/cars`)]);
-    soldCars=await sr.json(); allCars=await ar.json();
+    soldCars=await sr.json();allCars=await ar.json();
     const rev=soldCars.reduce((s,c)=>s+(c.price||0),0);
     const avg=allCars.length?allCars.reduce((s,c)=>s+(c.price||0),0)/allCars.length:0;
     document.getElementById('stat-available').textContent=allCars.length;
@@ -507,14 +467,14 @@ async function loadStats(){
   }catch(e){console.error(e);}
 }
 
-// DASHBOARD
 async function loadDashboard(){
   await loadStats();
   const c=document.getElementById('recent-sales');
   c.innerHTML=soldCars.length?soldCars.slice(0,5).map(s=>`
     <div class="activity-item">
       <div class="activity-icon">🚗</div>
-      <div class="activity-text"><div class="activity-title">${s.year||''} ${s.make} ${s.model}</div><div class="activity-sub">Sold ${s.soldDate?new Date(s.soldDate).toLocaleDateString('en-GB'):'—'}</div></div>
+      <div class="activity-text"><div class="activity-title">${s.year||''} ${s.make} ${s.model}</div>
+      <div class="activity-sub">Sold ${s.soldDate?new Date(s.soldDate).toLocaleDateString('en-GB'):'—'}</div></div>
       <div class="activity-price">${fmtP(s.price)}</div>
     </div>`).join(''):`<div class="empty-state"><div class="empty-icon">📋</div><p>No sales yet</p></div>`;
   const chart=document.getElementById('bar-chart');
@@ -524,7 +484,6 @@ async function loadDashboard(){
   chart.innerHTML=top.map(c=>`<div class="bar-col"><div class="bar" style="height:${Math.max(10,Math.round((c.price/mx)*100))}%" title="${c.make} ${c.model} — ${fmtP(c.price)}"></div><div class="bar-label">${c.make.slice(0,4)}</div></div>`).join('');
 }
 
-// INVENTORY
 async function loadInventory(){
   try{const r=await fetch(`${API}/cars`);allCars=await r.json();renderInv(allCars);document.getElementById('inv-badge').textContent=allCars.length;}
   catch(e){toast('Failed to load inventory','error');}
@@ -553,14 +512,13 @@ function renderInv(cars){
 function filterTable(q){renderInv(allCars.filter(c=>`${c.make} ${c.model} ${c.color||''} ${c.year||''}`.toLowerCase().includes(q.toLowerCase())));}
 function handleGlobalSearch(q){if(document.querySelector('.page.active').id==='page-inventory')filterTable(q);}
 
-// SOLD
 async function loadSold(){
   try{
     const r=await fetch(`${API}/sold`);soldCars=await r.json();
     document.getElementById('sold-badge').textContent=soldCars.length;
     const total=soldCars.reduce((s,c)=>s+(c.price||0),0);
     const re=document.getElementById('total-revenue-display');
-    if(re) re.textContent=`Total Revenue: ${fmtP(total)}`;
+    if(re)re.textContent=`Total Revenue: ${fmtP(total)}`;
     const t=document.getElementById('sold-tbody');
     if(!soldCars.length){t.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💰</div><p>No sold cars yet</p></div></td></tr>`;return;}
     t.innerHTML=soldCars.map(c=>{
@@ -582,11 +540,10 @@ async function loadSold(){
   }catch(e){toast('Failed to load sold cars','error');}
 }
 
-// IMAGE HANDLING
+/* ── IMAGE HANDLING ── */
 function onDragOver(e,zoneId){e.preventDefault();document.getElementById(zoneId).classList.add('drag-over');}
 function onDragLeave(zoneId){document.getElementById(zoneId).classList.remove('drag-over');}
 function onDrop(e,type){e.preventDefault();const id=type==='add'?'add-upload-zone':'edit-upload-zone';document.getElementById(id).classList.remove('drag-over');onFileSelect(e.dataTransfer.files,type);}
-
 function onFileSelect(files,type){
   const current=type==='add'?addImages:editImages;
   const remaining=10-current.length;
@@ -595,15 +552,10 @@ function onFileSelect(files,type){
   let done=0;
   Array.from(files).slice(0,toProcess).forEach(file=>{
     const reader=new FileReader();
-    reader.onload=e=>{
-      current.push(e.target.result);
-      done++;
-      if(done===toProcess) renderPreviews(type);
-    };
+    reader.onload=e=>{current.push(e.target.result);done++;if(done===toProcess)renderPreviews(type);};
     reader.readAsDataURL(file);
   });
 }
-
 function renderPreviews(type){
   const imgs=type==='add'?addImages:editImages;
   const grid=document.getElementById(type+'-preview-grid');
@@ -616,109 +568,126 @@ function renderPreviews(type){
       <button class="img-remove-btn" onclick="removeImg(${i},'${type}')">✕</button>
     </div>`).join('');
 }
-
 function removeImg(idx,type){
-  if(type==='add') addImages.splice(idx,1);
-  else editImages.splice(idx,1);
+  if(type==='add')addImages.splice(idx,1);else editImages.splice(idx,1);
   renderPreviews(type);
 }
 
-// ── HELPER: safely read a field value (fixes iOS Safari focus commit issue)
-function val(id){ return (document.getElementById(id).value || '').trim(); }
-function numVal(id){ const v=val(id); return v ? Number(v) : null; }
-
-// ADD CAR — iOS Safari fix
+/* ══════════════════════════════════════════════════════
+   ADD CAR — aggressive 3-layer iOS read
+   ══════════════════════════════════════════════════════ */
 async function submitCar(){
-  // Blur all inputs first so iOS Safari commits any in-progress edits
-  document.querySelectorAll('#page-add-car .form-control').forEach(el=>el.blur());
-  // Small delay to let iOS finish committing field values
-  await new Promise(r=>setTimeout(r,80));
-
-  const make  = val('f-make');
-  const model = val('f-model');
-  const price = val('f-price');
-
-  if(!make||!model||!price){toast('Make, model, price required','error');return;}
-
   const btn=document.getElementById('submit-btn');
-  btn.textContent='⏳ Saving...';btn.disabled=true;
+  btn.textContent='⏳ Reading fields…';
+  btn.disabled=true;
 
+  const ids=['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'];
+  const f=await _safeRead(ids);
+
+  const make=f['f-make'], model=f['f-model'], price=_stripNonNumeric(f['f-price']);
+
+  // Flash green on successfully-read required fields
+  if(make)  _flashGreen('f-make');
+  if(model) _flashGreen('f-model');
+  if(price) _flashGreen('f-price');
+
+  if(!make||!model||!price){
+    const missing=[];
+    if(!make)  missing.push('Make');
+    if(!model) missing.push('Model');
+    if(!price) missing.push('Price');
+    toast('❌ Missing: '+missing.join(', '),'error');
+    btn.textContent='🚗 Add to Inventory';
+    btn.disabled=false;
+    return;
+  }
+
+  btn.textContent='⏳ Saving…';
   try{
     const body={
       make, model,
-      year:        numVal('f-year'),
+      year:        f['f-year']    ? Number(_stripNonNumeric(f['f-year']))    : null,
       price:       Number(price),
-      mileage:     numVal('f-mileage'),
-      color:       val('f-color'),
-      description: val('f-desc'),
+      mileage:     f['f-mileage'] ? Number(_stripNonNumeric(f['f-mileage'])) : null,
+      color:       f['f-color'],
+      description: f['f-desc'],
       images:      addImages,
       image:       addImages[0]||null
     };
     const r=await fetch(`${API}/cars`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const d=await r.json();
-    if(!r.ok) throw new Error(d.error);
+    if(!r.ok)throw new Error(d.error||'Server error');
     toast(`✅ ${make} ${model} added!`,'success');
     clearAddForm();loadStats();
-  }catch(e){toast(e.message||'Failed','error');}
+  }catch(e){toast(e.message||'Failed to add car','error');}
   finally{btn.textContent='🚗 Add to Inventory';btn.disabled=false;}
 }
 
 function clearAddForm(){
-  ['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'].forEach(id=>document.getElementById(id).value='');
+  ['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.value='';delete _snap[id];}
+  });
   addImages=[];renderPreviews('add');
   document.getElementById('add-img-input').value='';
 }
 
-// EDIT CAR
+/* ══════════════════════════════════════════════════════
+   EDIT CAR — aggressive 3-layer iOS read
+   ══════════════════════════════════════════════════════ */
 async function openEdit(id){
   try{
     const r=await fetch(`${API}/cars/${id}`);
     const c=await r.json();
     document.getElementById('edit-id').value=c.id||c._id;
-    document.getElementById('e-make').value=c.make||'';
-    document.getElementById('e-model').value=c.model||'';
-    document.getElementById('e-year').value=c.year||'';
-    document.getElementById('e-color').value=c.color||'';
-    document.getElementById('e-price').value=c.price||'';
-    document.getElementById('e-mileage').value=c.mileage||'';
-    document.getElementById('e-desc').value=c.description||'';
+    const vals={
+      'e-make':c.make||'','e-model':c.model||'','e-year':c.year||'',
+      'e-color':c.color||'','e-price':c.price||'','e-mileage':c.mileage||'',
+      'e-desc':c.description||''
+    };
+    Object.entries(vals).forEach(([id,v])=>{
+      const el=document.getElementById(id);
+      if(el){el.value=v;_snap[id]=String(v);}  // seed snap with loaded values
+    });
     editImages=c.images&&c.images.length?[...c.images]:(c.image?[c.image]:[]);
     renderPreviews('edit');
     openModal('edit-modal');
   }catch(e){toast('Failed to load car','error');}
 }
 
-// SAVE EDIT — iOS Safari fix
 async function saveEdit(){
-  // Blur all inputs first so iOS Safari commits any in-progress edits
-  document.querySelectorAll('#edit-modal .form-control').forEach(el=>el.blur());
-  // Small delay to let iOS finish committing field values
-  await new Promise(r=>setTimeout(r,80));
+  const saveBtn=document.querySelector('#edit-modal .btn-gold');
+  if(saveBtn){saveBtn.textContent='⏳ Reading fields…';saveBtn.disabled=true;}
 
-  const id    = document.getElementById('edit-id').value;
-  const price = val('e-price');
+  const ids=['e-make','e-model','e-year','e-color','e-price','e-mileage','e-desc'];
+  const f=await _safeRead(ids);
+  const id=document.getElementById('edit-id').value;
+
+  // Flash required fields
+  ['e-make','e-model','e-price'].forEach(fid=>{if(f[fid])_flashGreen(fid);});
 
   const body={
-    make:        val('e-make'),
-    model:       val('e-model'),
-    year:        numVal('e-year'),
-    color:       val('e-color'),
-    price:       Number(price),
-    mileage:     numVal('e-mileage'),
-    description: val('e-desc'),
+    make:        f['e-make'],
+    model:       f['e-model'],
+    year:        f['e-year']    ? Number(_stripNonNumeric(f['e-year']))    : null,
+    color:       f['e-color'],
+    price:       f['e-price']   ? Number(_stripNonNumeric(f['e-price']))   : null,
+    mileage:     f['e-mileage'] ? Number(_stripNonNumeric(f['e-mileage'])) : null,
+    description: f['e-desc'],
     images:      editImages,
     image:       editImages[0]||null
   };
 
   try{
     const r=await fetch(`${API}/cars/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!r.ok) throw new Error('Update failed');
+    if(!r.ok)throw new Error('Update failed');
     toast('✅ Car updated','success');
     closeModal('edit-modal');loadInventory();
   }catch(e){toast(e.message||'Update failed','error');}
+  finally{if(saveBtn){saveBtn.textContent='Save Changes';saveBtn.disabled=false;}}
 }
 
-// SELL / DELETE / RESTORE
+/* ── SELL / DELETE / RESTORE ── */
 function confirmSell(id,name){
   showConfirm('💰 Mark as Sold',`Mark <strong>${name}</strong> as sold?`,async()=>{
     try{await fetch(`${API}/sell`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});toast(`💰 ${name} sold!`,'success');loadInventory();loadStats();}
@@ -756,9 +725,10 @@ function toast(msg,type='success'){
 }
 function fmtP(n){return(!n&&n!==0)?'—':'K '+Number(n).toLocaleString('en-ZM');}
 
-// Close sidebar on Escape key
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar();});
 
+// Boot
+_initSnapshots();
 loadDashboard();
 </script>
 </body>
