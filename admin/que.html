@@ -1,4 +1,10 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>T&M Motors — Customer Queries</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   :root{
@@ -12,8 +18,23 @@
     --tr:0.3s cubic-bezier(0.4,0,0.2,1);
   }
   body{font-family:'Montserrat',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;}
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
+  /* ── TOPBAR ── */
+  .topbar{
+    height:70px;background:var(--dark-2);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;padding:0 32px;
+    position:sticky;top:0;z-index:50;
+  }
+  .topbar h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
+  .topbar p{font-size:11px;color:var(--text-muted);letter-spacing:.05em;}
+  .topbar-right{display:flex;align-items:center;gap:12px;}
+  .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);border:2px solid var(--gold-dim);flex-shrink:0;}
+  .btn-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:var(--tr);}
+  .btn-icon:hover{border-color:var(--gold);color:var(--gold);}
+  .back-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:var(--dark-3);padding:8px 14px;border-radius:8px;transition:var(--tr);text-decoration:none;font-family:'Montserrat',sans-serif;}
+  .back-btn:hover{color:var(--gold);border-color:var(--gold);}
+
+  /* ── PAGE ── */
   .page{padding:32px;animation:fadeIn .4s ease;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
@@ -21,11 +42,9 @@
   .section-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--text);}
   .section-title span{color:var(--gold);}
 
-  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
-  .stat-card{
-    background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius);
-    padding:20px;position:relative;overflow:hidden;transition:var(--tr);
-  }
+  /* ── STATS ── */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:28px;}
+  .stat-card{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;transition:var(--tr);}
   .stat-card:hover{border-color:var(--border-bright);}
   .stat-card .label{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:8px;}
   .stat-card .value{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--text);line-height:1;}
@@ -33,193 +52,188 @@
   .stat-card .sub{font-size:11px;color:var(--text-dim);margin-top:6px;}
   .stat-card .icon{position:absolute;right:16px;top:16px;font-size:22px;opacity:.35;}
 
+  /* ── TABLE ── */
   .table-wrap{background:var(--dark-2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
-  .table-toolbar{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;
-  }
+  .table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;}
   .filter-chips{display:flex;gap:8px;flex-wrap:wrap;}
-  .chip{
-    padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.05em;
-    cursor:pointer;border:1px solid var(--border);color:var(--text-muted);
-    background:var(--dark-3);transition:var(--tr);
-  }
+  .chip{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.05em;cursor:pointer;border:1px solid var(--border);color:var(--text-muted);background:var(--dark-3);transition:var(--tr);}
   .chip:hover{border-color:var(--border-bright);color:var(--text);}
   .chip.active{background:var(--gold-glow);border-color:var(--gold);color:var(--gold);}
-
-  .search-box{
-    display:flex;align-items:center;gap:8px;
-    background:var(--dark-3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;
-    width:220px;transition:var(--tr);
-  }
+  .search-box{display:flex;align-items:center;gap:8px;background:var(--dark-3);border:1px solid var(--border);border-radius:8px;padding:8px 14px;width:220px;transition:var(--tr);}
   .search-box:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow);}
   .search-box input{background:none;border:none;outline:none;color:var(--text);font-size:12px;font-family:'Montserrat',sans-serif;width:100%;}
   .search-box input::placeholder{color:var(--text-dim);}
   .s-icon{color:var(--text-dim);font-size:13px;}
 
-  table{width:100%;border-collapse:collapse;}
+  /* Desktop table */
+  .desktop-table{width:100%;border-collapse:collapse;}
   thead tr{border-bottom:1px solid var(--border);}
-  th{
-    padding:14px 16px;text-align:left;font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--text-dim);font-weight:600;white-space:nowrap;
-  }
+  th{padding:14px 16px;text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;white-space:nowrap;}
   td{padding:14px 16px;font-size:13px;color:var(--text-muted);border-bottom:1px solid rgba(245,184,0,0.05);vertical-align:middle;}
   tbody tr:last-child td{border-bottom:none;}
   tbody tr:hover td{background:rgba(245,184,0,0.03);color:var(--text);}
   td.name{color:var(--text);font-weight:500;}
   td.car{color:var(--gold);font-weight:600;}
-  td.msg{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  td.msg{max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-  .badge{
-    display:inline-flex;align-items:center;gap:4px;
-    padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.06em;
-    text-transform:uppercase;
-  }
+  /* ── MOBILE CARDS (hidden on desktop) ── */
+  .mobile-cards{display:none;flex-direction:column;gap:0;}
+  .query-card{padding:16px;border-bottom:1px solid var(--border);transition:var(--tr);}
+  .query-card:last-child{border-bottom:none;}
+  .query-card:hover{background:rgba(245,184,0,0.03);}
+  .qc-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .qc-name{font-weight:600;font-size:14px;color:var(--text);}
+  .qc-car{font-size:12px;color:var(--gold);font-weight:600;margin-top:2px;}
+  .qc-contact{font-size:11px;color:var(--text-muted);margin-top:2px;}
+  .qc-msg{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px;}
+  .qc-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .qc-date{font-size:10px;color:var(--text-dim);}
+  .qc-actions{display:flex;gap:6px;}
+
+  /* ── BADGES ── */
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
   .badge.new{background:rgba(76,175,130,0.15);color:var(--success);border:1px solid rgba(76,175,130,0.3);}
   .badge.read{background:var(--dark-4);color:var(--text-dim);border:1px solid var(--border);}
   .badge.replied{background:var(--gold-glow);color:var(--gold);border:1px solid rgba(245,184,0,0.3);}
 
-  .btn-sm{
-    padding:6px 14px;border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.04em;
-    cursor:pointer;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);
-    font-family:'Montserrat',sans-serif;transition:var(--tr);white-space:nowrap;
-  }
+  /* ── BUTTONS ── */
+  .btn-sm{padding:6px 14px;border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.04em;cursor:pointer;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);font-family:'Montserrat',sans-serif;transition:var(--tr);white-space:nowrap;}
   .btn-sm:hover{border-color:var(--border-bright);color:var(--gold);}
   .btn-sm.gold{background:var(--gold);border-color:var(--gold);color:var(--dark);font-weight:700;}
   .btn-sm.gold:hover{background:var(--gold-light);}
   .btn-sm.danger{border-color:rgba(224,85,85,.3);color:var(--danger);}
   .btn-sm.danger:hover{background:rgba(224,85,85,.1);}
-
   .actions{display:flex;gap:6px;}
 
   .empty-state{text-align:center;padding:40px;color:var(--text-dim);}
   .empty-icon{font-size:32px;margin-bottom:8px;}
-
-  .modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  z-index:200;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-
-  backdrop-filter:blur(4px);
-
-  /* 👇 start hidden by default */
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .2s ease;
-}
-
-/* 👇 when active */
-.modal-overlay.open{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.modal{
-  background:var(--dark-2);
-  border:1px solid var(--border-bright);
-  border-radius:var(--radius-lg);
-  width:100%;
-  max-width:520px;
-  padding:32px;
-  position:relative;
-
-  animation:fadeIn .3s ease;
-}
-
-.modal-close{
-  position:absolute;
-  top:16px;
-  right:16px;
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:var(--dark-3);
-  color:var(--text-muted);
-  cursor:pointer;
-  font-size:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:var(--tr);
-}
-
-.modal-close:hover{
-  border-color:var(--danger);
-  color:var(--danger);
-}
-
-.modal-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;
-  font-weight:700;
-  color:var(--text);
-  margin-bottom:20px;
-}
-
-.modal-field{margin-bottom:16px;}
-
-.modal-label{
-  font-size:10px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--text-dim);
-  font-weight:600;
-  margin-bottom:6px;
-}
-
-.modal-value{
-  font-size:14px;
-  color:var(--text);
-}
-
-.modal-value.gold{
-  color:var(--gold);
-  font-weight:600;
-}
-
-.modal-msg{
-  background:var(--dark-3);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:14px;
-  font-size:13px;
-  color:var(--text);
-  line-height:1.6;
-}
-
-.modal-actions{
-  display:flex;
-  gap:10px;
-  margin-top:24px;
-  justify-content:flex-end;
-}
-
-  .topbar{
-    height:70px;background:var(--dark-2);border-bottom:1px solid var(--border);
-    display:flex;align-items:center;justify-content:space-between;padding:0 32px;
-  }
-  .topbar h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;}
-  .topbar p{font-size:11px;color:var(--text-muted);letter-spacing:.05em;}
-  .topbar-right{display:flex;align-items:center;gap:16px;}
-  .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dim));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark);border:2px solid var(--gold-dim);}
-  .btn-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:var(--tr);}
-  .btn-icon:hover{border-color:var(--gold);color:var(--gold);}
   .loading{text-align:center;padding:40px;color:var(--text-dim);font-size:13px;}
+
+  /* ── MODAL ── */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    backdrop-filter:blur(4px);
+    opacity:0;pointer-events:none;transition:opacity .2s ease;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .modal{
+    background:var(--dark-2);border:1px solid var(--border-bright);
+    border-radius:var(--radius-lg);width:100%;max-width:520px;padding:32px;position:relative;
+    animation:fadeIn .3s ease;max-height:90vh;overflow-y:auto;
+  }
+  .modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--dark-3);color:var(--text-muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:var(--tr);}
+  .modal-close:hover{border-color:var(--danger);color:var(--danger);}
+  .modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:20px;}
+  .modal-field{margin-bottom:16px;}
+  .modal-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:6px;}
+  .modal-value{font-size:14px;color:var(--text);}
+  .modal-value.gold{color:var(--gold);font-weight:600;}
+  .modal-msg{background:var(--dark-3);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;color:var(--text);line-height:1.6;}
+  .modal-actions{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;flex-wrap:wrap;}
+
+  /* ══════════════════════════════════════════
+     ACTION TOAST NOTIFICATION
+     ══════════════════════════════════════════ */
+  .action-toast{
+    position:fixed;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(0.85);
+    z-index:999;
+    background:var(--dark-2);
+    border:1px solid var(--border-bright);
+    border-radius:var(--radius-lg);
+    padding:28px 36px;
+    text-align:center;
+    min-width:220px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .action-toast.show{
+    opacity:1;
+    pointer-events:none;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  .action-toast-icon{font-size:36px;margin-bottom:10px;line-height:1;}
+  .action-toast-label{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--text-muted);font-weight:600;margin-bottom:4px;
+  }
+  .action-toast-word{
+    font-family:'Cormorant Garamond',serif;
+    font-size:32px;font-weight:700;line-height:1;
+  }
+  .action-toast-word.gold{color:var(--gold);}
+  .action-toast-word.success{color:var(--success);}
+  .action-toast-word.danger{color:var(--danger);}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    .topbar{padding:0 20px;height:60px;}
+    .topbar h1{font-size:18px;}
+    .page{padding:20px;}
+    .stats-grid{gap:12px;margin-bottom:20px;}
+  }
+
+  @media(max-width:768px){
+    .topbar{padding:0 16px;height:58px;}
+    .topbar h1{font-size:17px;}
+    .topbar p{display:none;}
+    .page{padding:14px;}
+
+    /* Stats: 2-col grid */
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+    .stat-card{padding:14px;}
+    .stat-card .value{font-size:26px;}
+    .stat-card .icon{font-size:18px;}
+
+    /* Table toolbar */
+    .table-toolbar{padding:12px 14px;gap:10px;}
+    .filter-chips{gap:6px;}
+    .chip{padding:5px 10px;font-size:10px;}
+    .search-box{width:100%;order:2;}  /* move search below chips */
+    .table-toolbar{flex-direction:column;align-items:stretch;}
+    .filter-chips{order:1;}
+
+    /* Hide desktop table, show mobile cards */
+    .desktop-table{display:none;}
+    .mobile-cards{display:flex;}
+
+    /* Modal: bottom sheet on mobile */
+    .modal-overlay{align-items:flex-end;padding:0;}
+    .modal{
+      max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+      padding:24px 20px 32px;max-height:88vh;
+    }
+    .modal-grid{grid-template-columns:1fr!important;}
+    .modal-actions{justify-content:stretch;}
+    .modal-actions button{flex:1;}
+
+    /* Action toast stays centered — just narrower */
+    .action-toast{min-width:180px;padding:24px 28px;}
+    .action-toast-word{font-size:28px;}
+  }
+
+  @media(max-width:480px){
+    .stats-grid{grid-template-columns:repeat(2,1fr);}
+    .topbar h1{font-size:15px;}
+    .back-btn span{display:none;} /* icon only */
+  }
 </style>
+</head>
+<body>
 
 <div style="background:var(--dark);min-height:100vh;">
 
   <div class="topbar">
-    <div>
-      <h1 id="page-title">Customer Queries</h1>
-      <p>All incoming enquiries from your storefront</p>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a href="index.html" class="back-btn">← <span>Dashboard</span></a>
+      <div>
+        <h1>Customer <span style="color:var(--gold)">Queries</span></h1>
+        <p>All incoming enquiries from your storefront</p>
+      </div>
     </div>
     <div class="topbar-right">
       <button class="btn-icon" title="Refresh" onclick="loadEnquiries()">↻</button>
@@ -249,86 +263,83 @@
         </div>
       </div>
 
-      <table>
+      <!-- DESKTOP TABLE -->
+      <table class="desktop-table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Vehicle</th>
-            <th>Message</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Actions</th>
+            <th>#</th><th>Name</th><th>Contact</th><th>Vehicle</th>
+            <th>Message</th><th>Status</th><th>Date</th><th>Actions</th>
           </tr>
         </thead>
         <tbody id="q-tbody">
           <tr><td colspan="8"><div class="loading">Loading queries...</div></td></tr>
         </tbody>
       </table>
+
+      <!-- MOBILE CARDS -->
+      <div class="mobile-cards" id="q-cards">
+        <div class="loading">Loading queries...</div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ENQUIRY DETAIL MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
-    
     <button class="modal-close" onclick="closeModalBtn()">✕</button>
-    
     <div class="modal-title" id="m-title">Enquiry Details</div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="modal-field">
-        <div class="modal-label">Name</div>
-        <div class="modal-value" id="m-name"></div>
-      </div>
-
-      <div class="modal-field">
-        <div class="modal-label">Status</div>
-        <div id="m-status"></div>
-      </div>
-
-      <div class="modal-field">
-        <div class="modal-label">Phone</div>
-        <div class="modal-value" id="m-phone"></div>
-      </div>
-
-      <div class="modal-field">
-        <div class="modal-label">Email</div>
-        <div class="modal-value" id="m-email"></div>
-      </div>
-
-      <div class="modal-field">
-        <div class="modal-label">Vehicle</div>
-        <div class="modal-value gold" id="m-car"></div>
-      </div>
-
-      <div class="modal-field">
-        <div class="modal-label">Received</div>
-        <div class="modal-value" id="m-date"></div>
-      </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="modal-grid">
+      <div class="modal-field"><div class="modal-label">Name</div><div class="modal-value" id="m-name"></div></div>
+      <div class="modal-field"><div class="modal-label">Status</div><div id="m-status"></div></div>
+      <div class="modal-field"><div class="modal-label">Phone</div><div class="modal-value" id="m-phone"></div></div>
+      <div class="modal-field"><div class="modal-label">Email</div><div class="modal-value" id="m-email"></div></div>
+      <div class="modal-field"><div class="modal-label">Vehicle</div><div class="modal-value gold" id="m-car"></div></div>
+      <div class="modal-field"><div class="modal-label">Received</div><div class="modal-value" id="m-date"></div></div>
     </div>
-
     <div class="modal-field" style="margin-top:8px;">
       <div class="modal-label">Message</div>
       <div class="modal-msg" id="m-msg"></div>
     </div>
-
     <div class="modal-actions" id="m-actions"></div>
-
   </div>
 </div>
 
-<!-- ONLY SCRIPT PART UPDATED — KEEP YOUR CSS/HTML SAME -->
-<script>
-const API = '';  // same origin — adjust if your backend is on a different port e.g. 'http://localhost:3000'
+<!-- ACTION TOAST -->
+<div class="action-toast" id="action-toast">
+  <div class="action-toast-icon" id="at-icon"></div>
+  <div class="action-toast-label" id="at-label"></div>
+  <div class="action-toast-word" id="at-word"></div>
+</div>
 
+<script>
+const API = '';
 let allEnquiries = [];
 let currentFilter = 'all';
-let searchQuery = '';
+let searchQuery   = '';
 let currentEnquiry = null;
+let _toastTimer = null;
 
-// ── Load & render ──────────────────────────────────────────
+/* ══════════════════════════════════════════════
+   ACTION TOAST
+   icon     — emoji shown above
+   label    — small caps label e.g. "Enquiry"
+   word     — big coloured word e.g. "Deleted"
+   colorCls — 'gold' | 'success' | 'danger'
+   ══════════════════════════════════════════════ */
+function showActionToast(icon, label, word, colorCls = 'gold', duration = 1600) {
+  const toast = document.getElementById('action-toast');
+  document.getElementById('at-icon').textContent  = icon;
+  document.getElementById('at-label').textContent = label;
+  const wordEl = document.getElementById('at-word');
+  wordEl.textContent  = word;
+  wordEl.className    = `action-toast-word ${colorCls}`;
+  toast.classList.add('show');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+/* ── Load & render ── */
 async function loadEnquiries() {
   try {
     const res = await fetch(`${API}/api/enquiries`);
@@ -336,8 +347,9 @@ async function loadEnquiries() {
     updateStats();
     renderTable();
   } catch (err) {
-    document.getElementById('q-tbody').innerHTML =
-      `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">⚠️</div>Failed to load queries. Is the server running?</div></td></tr>`;
+    const msg = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">⚠️</div>Failed to load. Is the server running?</div></td></tr>`;
+    document.getElementById('q-tbody').innerHTML  = msg;
+    document.getElementById('q-cards').innerHTML  = `<div class="empty-state"><div class="empty-icon">⚠️</div>Failed to load.</div>`;
   }
 }
 
@@ -349,100 +361,119 @@ function updateStats() {
   document.getElementById('s-today').textContent   = allEnquiries.filter(e => e.createdAt?.startsWith(today)).length;
 }
 
-function renderTable() {
-  const tbody = document.getElementById('q-tbody');
+function getFilteredRows() {
   let rows = allEnquiries;
-
   if (currentFilter !== 'all') rows = rows.filter(e => e.status === currentFilter);
   if (searchQuery) {
     const q = searchQuery.toLowerCase();
     rows = rows.filter(e =>
-      e.name?.toLowerCase().includes(q) ||
-      e.email?.toLowerCase().includes(q) ||
-      e.phone?.toLowerCase().includes(q) ||
+      e.name?.toLowerCase().includes(q)    ||
+      e.email?.toLowerCase().includes(q)   ||
+      e.phone?.toLowerCase().includes(q)   ||
       e.message?.toLowerCase().includes(q) ||
       e.carMake?.toLowerCase().includes(q) ||
       e.carModel?.toLowerCase().includes(q)
     );
   }
-
-  if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📭</div>No queries found</div></td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = rows.map((e, i) => `
-    <tr>
-      <td>${i + 1}</td>
-      <td class="name">${esc(e.name)}</td>
-      <td>${esc(e.phone || e.email || '—')}</td>
-      <td class="car">${e.carMake ? esc(e.carMake + ' ' + (e.carModel || '')) : '—'}</td>
-      <td class="msg">${esc(e.message || '—')}</td>
-      <td>${badgeHtml(e.status)}</td>
-      <td>${fmtDate(e.createdAt)}</td>
-      <td>
-        <div class="actions">
-          <button class="btn-sm" onclick="openModal('${e.id}')">View</button>
-          ${e.status !== 'replied' ? `<button class="btn-sm gold" onclick="markReplied('${e.id}', event)">Replied</button>` : ''}
-          <button class="btn-sm danger" onclick="deleteEnquiry('${e.id}', event)">✕</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  return rows;
 }
 
-// ── Filters & search ───────────────────────────────────────
+function renderTable() {
+  const rows = getFilteredRows();
+
+  /* ── Desktop table ── */
+  const tbody = document.getElementById('q-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📭</div>No queries found</div></td></tr>`;
+  } else {
+    tbody.innerHTML = rows.map((e, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td class="name">${esc(e.name)}</td>
+        <td>${esc(e.phone || e.email || '—')}</td>
+        <td class="car">${e.carMake ? esc(e.carMake + ' ' + (e.carModel || '')) : '—'}</td>
+        <td class="msg">${esc(e.message || '—')}</td>
+        <td>${badgeHtml(e.status)}</td>
+        <td>${fmtDate(e.createdAt)}</td>
+        <td>
+          <div class="actions">
+            <button class="btn-sm" onclick="openModal('${e.id}')">View</button>
+            ${e.status !== 'replied' ? `<button class="btn-sm gold" onclick="markReplied('${e.id}',event)">Replied</button>` : ''}
+            <button class="btn-sm danger" onclick="deleteEnquiry('${e.id}',event)">✕</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  /* ── Mobile cards ── */
+  const cards = document.getElementById('q-cards');
+  if (!rows.length) {
+    cards.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>No queries found</div>`;
+  } else {
+    cards.innerHTML = rows.map((e, i) => `
+      <div class="query-card">
+        <div class="qc-row">
+          <div>
+            <div class="qc-name">${esc(e.name)}</div>
+            <div class="qc-car">${e.carMake ? esc(e.carMake + ' ' + (e.carModel || '')) : '—'}</div>
+            <div class="qc-contact">${esc(e.phone || e.email || '—')}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+            ${badgeHtml(e.status)}
+            <span style="font-size:10px;color:var(--text-dim);">${fmtDate(e.createdAt)}</span>
+          </div>
+        </div>
+        <div class="qc-msg">${esc(e.message || '(no message)')}</div>
+        <div class="qc-footer">
+          <div class="qc-actions">
+            <button class="btn-sm" onclick="openModal('${e.id}')">View</button>
+            ${e.status !== 'replied' ? `<button class="btn-sm gold" onclick="markReplied('${e.id}',event)">✅ Replied</button>` : ''}
+            <button class="btn-sm danger" onclick="deleteEnquiry('${e.id}',event)">🗑 Delete</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+/* ── Filters & search ── */
 function setFilter(f, el) {
   currentFilter = f;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   renderTable();
 }
+function handleSearch(val) { searchQuery = val; renderTable(); }
 
-function handleSearch(val) {
-  searchQuery = val;
-  renderTable();
-}
-
-// ── Modal ──────────────────────────────────────────────────
+/* ── Modal ── */
 function openModal(id) {
   currentEnquiry = allEnquiries.find(e => e.id === id);
   if (!currentEnquiry) return;
   const e = currentEnquiry;
-
   document.getElementById('m-title').textContent = `Enquiry #${e.id.slice(-6).toUpperCase()}`;
-  document.getElementById('m-name').textContent  = e.name || '—';
+  document.getElementById('m-name').textContent  = e.name  || '—';
   document.getElementById('m-phone').textContent = e.phone || '—';
   document.getElementById('m-email').textContent = e.email || '—';
-  document.getElementById('m-car').textContent   = e.carMake ? `${e.carMake} ${e.carModel || ''} ${e.carYear || ''}`.trim() : '—';
+  document.getElementById('m-car').textContent   = e.carMake ? `${e.carMake} ${e.carModel||''} ${e.carYear||''}`.trim() : '—';
   document.getElementById('m-date').textContent  = fmtDate(e.createdAt);
   document.getElementById('m-msg').textContent   = e.message || '(no message)';
   document.getElementById('m-status').innerHTML  = badgeHtml(e.status);
-
-  const actions = document.getElementById('m-actions');
-  actions.innerHTML = `
-    ${e.status !== 'replied' ? `<button class="btn-sm gold" onclick="markReplied('${e.id}', event)">Mark as Replied</button>` : ''}
-    <button class="btn-sm danger" onclick="deleteEnquiry('${e.id}', event)">Delete</button>
+  document.getElementById('m-actions').innerHTML = `
+    ${e.status !== 'replied' ? `<button class="btn-sm gold" onclick="markReplied('${e.id}',event)">Mark as Replied</button>` : ''}
+    <button class="btn-sm danger" onclick="deleteEnquiry('${e.id}',event)">Delete</button>
     <button class="btn-sm" onclick="closeModalBtn()">Close</button>
   `;
-
   document.getElementById('modal-overlay').classList.add('open');
 }
+function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
-}
-
-function closeModalBtn() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-// ── Actions ────────────────────────────────────────────────
+/* ── Actions ── */
 async function markReplied(id, event) {
   event?.stopPropagation();
   await fetch(`${API}/api/enquiries/${id}/replied`, { method: 'PUT' });
   await loadEnquiries();
-  if (currentEnquiry?.id === id) openModal(id); // refresh modal if open
+  if (currentEnquiry?.id === id) openModal(id);
+  showActionToast('✅', 'Enquiry', 'Replied', 'gold');
 }
 
 async function deleteEnquiry(id, event) {
@@ -451,25 +482,24 @@ async function deleteEnquiry(id, event) {
   await fetch(`${API}/api/enquiries/${id}`, { method: 'DELETE' });
   closeModalBtn();
   await loadEnquiries();
+  showActionToast('🗑️', 'Enquiry', 'Deleted', 'gold');
 }
 
-// ── Helpers ────────────────────────────────────────────────
+/* ── Helpers ── */
 function esc(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-
 function fmtDate(iso) {
   if (!iso) return '—';
   return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 }
-
 function badgeHtml(status) {
-  const map = { new: 'new', read: 'read', replied: 'replied' };
-  const cls = map[status] || 'read';
-  const labels = { new: '🔔 New', read: '👁 Read', replied: '✅ Replied' };
+  const cls    = { new:'new', read:'read', replied:'replied' }[status] || 'read';
+  const labels = { new:'🔔 New', read:'👁 Read', replied:'✅ Replied' };
   return `<span class="badge ${cls}">${labels[status] || status}</span>`;
 }
 
-// ── Init ───────────────────────────────────────────────────
 loadEnquiries();
 </script>
+</body>
+</html>
