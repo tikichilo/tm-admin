@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>T&M Motors — Command Centre</title>
+<title>T&M Motors - Command Centre</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -95,6 +95,19 @@
   .badge-sold{background:rgba(224,85,85,.12);color:var(--danger);border:1px solid rgba(224,85,85,.25);}
   .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
   .action-btns{display:flex;gap:6px;flex-wrap:wrap;}
+  .mobile-cards{display:none;flex-direction:column;}
+  .car-card{padding:16px;border-bottom:1px solid var(--border);transition:var(--tr);}
+  .car-card:last-child{border-bottom:none;}
+  .car-card:active{background:rgba(245,184,0,.03);}
+  .cc-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+  .cc-thumb{width:68px;height:50px;border-radius:8px;background:var(--dark-4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--text-dim);overflow:hidden;flex-shrink:0;}
+  .cc-thumb img{width:100%;height:100%;object-fit:cover;}
+  .cc-info{flex:1;min-width:0;}
+  .cc-name{font-weight:700;font-size:14px;color:var(--text);}
+  .cc-meta{font-size:11px;color:var(--text-muted);margin-top:3px;}
+  .cc-price{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold);margin-top:4px;}
+  .cc-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .cc-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   .form-group{display:flex;flex-direction:column;gap:8px;}
   .form-group.full{grid-column:1/-1;}
@@ -146,9 +159,17 @@
   .modal-close:hover{color:var(--danger);border-color:var(--danger);}
   .modal-body{padding:24px 28px;}
   .modal-footer{padding:16px 28px 24px;display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;}
-  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:10px;}
+  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:998;display:flex;flex-direction:column;gap:10px;}
   .toast{background:var(--dark-3);border:1px solid var(--border-bright);border-radius:10px;padding:14px 20px;font-size:13px;font-weight:500;color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;min-width:260px;}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .action-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.82);z-index:999;background:var(--dark-2);border:1px solid var(--border-bright);border-radius:var(--radius-lg);padding:28px 40px;text-align:center;min-width:200px;box-shadow:0 30px 80px rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .28s cubic-bezier(0.34,1.56,0.64,1);}
+  .action-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  .at-icon{font-size:38px;line-height:1;margin-bottom:10px;}
+  .at-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:4px;}
+  .at-word{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;line-height:1;}
+  .at-word.gold{color:var(--gold);}
+  .at-word.success{color:var(--success);}
+  .at-word.danger{color:var(--danger);}
   ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--dark);}::-webkit-scrollbar-thumb{background:var(--dark-5);border-radius:3px;}
   @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr);}.dash-bottom{grid-template-columns:1fr;}}
   @media(max-width:900px){.sidebar{width:220px;}.main{margin-left:220px;}}
@@ -157,9 +178,9 @@
     .main{margin-left:0;}.topbar{padding:0 16px;height:60px;}.topbar-left h1{font-size:18px;}.topbar-left p{display:none;}.topbar-right .search-box{display:none;}.hamburger{display:flex;}
     .page{padding:16px;}.stats-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}.stat-card{padding:16px;}.stat-card .value{font-size:28px;}.stat-card .icon{font-size:22px;}
     .dash-bottom{gap:12px;margin-top:12px;}.dash-card{padding:16px;}.section-header{margin-bottom:14px;}
-    .table-wrap{border-radius:var(--radius);overflow-x:auto;-webkit-overflow-scrolling:touch;}.table-toolbar{padding:12px 14px;gap:8px;}.table-toolbar .search-box{width:100%;}
-    thead th{padding:10px 14px;white-space:nowrap;}tbody td{padding:12px 14px;white-space:nowrap;}
-    .action-btns{flex-direction:column;gap:4px;}.action-btns .btn-sm{width:100%;justify-content:center;}
+    .table-wrap{border-radius:var(--radius);overflow:hidden;}.table-toolbar{padding:12px 14px;gap:8px;}.table-toolbar .search-box{width:100%;}
+    table{display:none;}
+    .mobile-cards{display:flex;}
     .form-card{padding:16px;margin-bottom:16px;}.form-grid{grid-template-columns:1fr;gap:14px;}.form-group.full{grid-column:1;}
     .img-preview-grid{grid-template-columns:repeat(3,1fr);}
     .modal-overlay{padding:12px;align-items:flex-end;}.modal{width:100%;max-height:85vh;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
@@ -167,6 +188,7 @@
     #edit-modal .form-grid{grid-template-columns:1fr;}
     .toast-wrap{left:16px;right:16px;bottom:16px;}.toast{min-width:unset;width:100%;}
     #page-add-car > div:last-child{flex-direction:column;}#page-add-car > div:last-child .btn{width:100%;justify-content:center;}
+    .action-toast{min-width:170px;padding:22px 28px;}.at-word{font-size:28px;}
   }
   @media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.stat-card .value{font-size:32px;}.img-preview-grid{grid-template-columns:repeat(2,1fr);}.topbar-left h1{font-size:16px;}}
 </style>
@@ -181,12 +203,12 @@
     </div>
     <nav class="sidebar-nav">
       <div class="nav-label">Main</div>
-      <div class="nav-item active" onclick="navigate('dashboard')"><div class="nav-icon">📊</div>Dashboard</div>
-      <div class="nav-item" onclick="navigate('inventory')"><div class="nav-icon">🚗</div>Inventory<span class="nav-badge" id="inv-badge">0</span></div>
-      <div class="nav-item" onclick="navigate('sold')"><div class="nav-icon">💰</div>Sold Cars<span class="nav-badge" id="sold-badge">0</span></div>
+      <div class="nav-item active" onclick="navigate('dashboard')"><div class="nav-icon">&#x1F4CA;</div>Dashboard</div>
+      <div class="nav-item" onclick="navigate('inventory')"><div class="nav-icon">&#x1F697;</div>Inventory<span class="nav-badge" id="inv-badge">0</span></div>
+      <div class="nav-item" onclick="navigate('sold')"><div class="nav-icon">&#x1F4B0;</div>Sold Cars<span class="nav-badge" id="sold-badge">0</span></div>
       <div class="nav-label" style="margin-top:12px;">Management</div>
-      <div class="nav-item" onclick="navigate('add-car')"><div class="nav-icon">➕</div>Add New Car</div>
-      <div class="nav-item" onclick="window.location.href='que.html'"><div class="nav-icon">📩</div>Manage Enquiries</div>
+      <div class="nav-item" onclick="navigate('add-car')"><div class="nav-icon">&#x2795;</div>Add New Car</div>
+      <div class="nav-item" onclick="window.location.href='que.html'"><div class="nav-icon">&#x1F4E9;</div>Manage Enquiries</div>
     </nav>
     <div class="sidebar-footer">T&M Command Centre v2.0</div>
   </aside>
@@ -194,45 +216,43 @@
     <div class="topbar">
       <div class="topbar-left">
         <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-        <div><h1 id="page-title">Dashboard</h1><p id="page-sub">Welcome back — here's your fleet overview</p></div>
+        <div><h1 id="page-title">Dashboard</h1><p id="page-sub">Welcome back</p></div>
       </div>
       <div class="topbar-right">
-        <div class="search-box"><span>🔍</span><input type="text" id="global-search" placeholder="Search cars..." oninput="handleGlobalSearch(this.value)"/></div>
-        <button class="btn-icon" onclick="loadAll()" title="Refresh">↻</button>
+        <div class="search-box"><span>&#x1F50D;</span><input type="text" id="global-search" placeholder="Search cars..." oninput="handleGlobalSearch(this.value)"/></div>
+        <button class="btn-icon" onclick="loadAll()" title="Refresh">&#x21BB;</button>
         <div class="avatar">TM</div>
       </div>
     </div>
-
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="stats-grid">
-        <div class="stat-card"><div class="label">Available Stock</div><div class="value gold" id="stat-available">—</div><div class="sub">Units ready to sell</div><div class="icon">🚗</div></div>
-        <div class="stat-card"><div class="label">Total Sold</div><div class="value" id="stat-sold">—</div><div class="sub">All-time closed deals</div><div class="icon">🏆</div></div>
-        <div class="stat-card"><div class="label">Total Revenue</div><div class="value gold" id="stat-revenue">—</div><div class="sub">From all sold units</div><div class="icon">💎</div></div>
-        <div class="stat-card"><div class="label">Avg. Listing Price</div><div class="value" id="stat-avg">—</div><div class="sub">Current inventory</div><div class="icon">📈</div></div>
+        <div class="stat-card"><div class="label">Available Stock</div><div class="value gold" id="stat-available">&#x2014;</div><div class="sub">Units ready to sell</div><div class="icon">&#x1F697;</div></div>
+        <div class="stat-card"><div class="label">Total Sold</div><div class="value" id="stat-sold">&#x2014;</div><div class="sub">All-time closed deals</div><div class="icon">&#x1F3C6;</div></div>
+        <div class="stat-card"><div class="label">Total Revenue</div><div class="value gold" id="stat-revenue">&#x2014;</div><div class="sub">From all sold units</div><div class="icon">&#x1F48E;</div></div>
+        <div class="stat-card"><div class="label">Avg. Listing Price</div><div class="value" id="stat-avg">&#x2014;</div><div class="sub">Current inventory</div><div class="icon">&#x1F4C8;</div></div>
       </div>
       <div class="dash-bottom">
-        <div class="dash-card"><div class="dash-card-title">Recent Sales</div><div class="activity-list" id="recent-sales"><div class="empty-state"><div class="empty-icon">📋</div><p>No sales yet</p></div></div></div>
-        <div class="dash-card"><div class="dash-card-title">Top Inventory by Price</div><div class="bar-chart" id="bar-chart"><div class="empty-state" style="width:100%"><div class="empty-icon">📊</div><p>No data</p></div></div></div>
+        <div class="dash-card"><div class="dash-card-title">Recent Sales</div><div class="activity-list" id="recent-sales"><div class="empty-state"><div class="empty-icon">&#x1F4CB;</div><p>No sales yet</p></div></div></div>
+        <div class="dash-card"><div class="dash-card-title">Top Inventory by Price</div><div class="bar-chart" id="bar-chart"><div class="empty-state" style="width:100%"><div class="empty-icon">&#x1F4CA;</div><p>No data</p></div></div></div>
       </div>
     </div>
-
     <!-- INVENTORY -->
     <div class="page" id="page-inventory">
       <div class="section-header">
         <div class="section-title">Available <span>Inventory</span></div>
-        <button class="btn btn-gold" onclick="navigate('add-car')">＋ Add New Car</button>
+        <button class="btn btn-gold" onclick="navigate('add-car')">&#xFF0B; Add New Car</button>
       </div>
       <div class="table-wrap">
         <div class="table-toolbar">
           <div><span class="chip active">All</span></div>
-          <div class="search-box" style="width:180px;"><span>🔍</span><input type="text" id="inv-search" placeholder="Filter..." oninput="filterTable(this.value)"/></div>
+          <div class="search-box" style="width:180px;"><span>&#x1F50D;</span><input type="text" id="inv-search" placeholder="Filter..." oninput="filterTable(this.value)"/></div>
         </div>
         <table><thead><tr><th>Vehicle</th><th>Year</th><th>Mileage</th><th>Colour</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="inv-tbody"><tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🚗</div><p>Loading...</p></div></td></tr></tbody></table>
+        <tbody id="inv-tbody"><tr><td colspan="7"><div class="empty-state"><div class="empty-icon">&#x1F697;</div><p>Loading...</p></div></td></tr></tbody></table>
+        <div class="mobile-cards" id="inv-cards"></div>
       </div>
     </div>
-
     <!-- SOLD -->
     <div class="page" id="page-sold">
       <div class="section-header">
@@ -241,55 +261,46 @@
       </div>
       <div class="table-wrap">
         <table><thead><tr><th>Vehicle</th><th>Year</th><th>Colour</th><th>Sale Price</th><th>Date Sold</th><th>Actions</th></tr></thead>
-        <tbody id="sold-tbody"><tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💰</div><p>No sold cars yet</p></div></td></tr></tbody></table>
+        <tbody id="sold-tbody"><tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#x1F4B0;</div><p>No sold cars yet</p></div></td></tr></tbody></table>
+        <div class="mobile-cards" id="sold-cards"></div>
       </div>
     </div>
-
     <!-- ADD CAR -->
     <div class="page" id="page-add-car">
       <div class="section-header"><div class="section-title">Add New <span>Vehicle</span></div></div>
       <div class="form-card">
         <div class="form-card-title">Vehicle Details</div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Make *</label>
-            <input class="form-control" id="f-make" type="text" placeholder="e.g. Toyota" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
-          <div class="form-group"><label class="form-label">Model *</label>
-            <input class="form-control" id="f-model" type="text" placeholder="e.g. Land Cruiser" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
-          <div class="form-group"><label class="form-label">Year</label>
-            <!-- type=text + inputmode=numeric avoids iOS number-input focus-commit bug -->
-            <input class="form-control" id="f-year" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 2022"/></div>
-          <div class="form-group"><label class="form-label">Colour</label>
-            <input class="form-control" id="f-color" type="text" placeholder="e.g. Pearl White" autocomplete="off" autocorrect="off"/></div>
-          <div class="form-group"><label class="form-label">Price (ZMW) *</label>
-            <input class="form-control" id="f-price" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 450000"/></div>
-          <div class="form-group"><label class="form-label">Mileage (km)</label>
-            <input class="form-control" id="f-mileage" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 35000"/></div>
-          <div class="form-group full"><label class="form-label">Description</label>
-            <textarea class="form-control" id="f-desc" placeholder="Full service history, one owner, immaculate condition..."></textarea></div>
+          <div class="form-group"><label class="form-label">Make *</label><input class="form-control" id="f-make" type="text" placeholder="e.g. Toyota" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
+          <div class="form-group"><label class="form-label">Model *</label><input class="form-control" id="f-model" type="text" placeholder="e.g. Land Cruiser" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/></div>
+          <div class="form-group"><label class="form-label">Year</label><input class="form-control" id="f-year" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 2022"/></div>
+          <div class="form-group"><label class="form-label">Colour</label><input class="form-control" id="f-color" type="text" placeholder="e.g. Pearl White" autocomplete="off" autocorrect="off"/></div>
+          <div class="form-group"><label class="form-label">Price (ZMW) *</label><input class="form-control" id="f-price" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 450000"/></div>
+          <div class="form-group"><label class="form-label">Mileage (km)</label><input class="form-control" id="f-mileage" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 35000"/></div>
+          <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="f-desc" placeholder="Full service history, one owner..."></textarea></div>
         </div>
       </div>
       <div class="form-card">
-        <div class="form-card-title">📸 Vehicle Photos <span style="font-size:13px;font-weight:400;color:var(--text-muted);">(up to 10 images · first = primary)</span></div>
+        <div class="form-card-title">&#x1F4F8; Vehicle Photos <span style="font-size:13px;font-weight:400;color:var(--text-muted);">(up to 10 images)</span></div>
         <div class="upload-zone" id="add-upload-zone" ondragover="onDragOver(event,'add-upload-zone')" ondragleave="onDragLeave('add-upload-zone')" ondrop="onDrop(event,'add')">
           <input type="file" id="add-img-input" accept="image/*" multiple onchange="onFileSelect(this.files,'add')"/>
-          <div class="upload-zone-icon">📷</div>
-          <div class="upload-zone-text"><strong>Click to upload</strong> or drag & drop<br/><span style="font-size:11px;color:var(--text-dim);">JPG, PNG, WEBP — max 10 images</span></div>
+          <div class="upload-zone-icon">&#x1F4F7;</div>
+          <div class="upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop</div>
         </div>
         <div class="img-count-text" id="add-img-count"></div>
         <div class="img-preview-grid" id="add-preview-grid"></div>
       </div>
       <div style="display:flex;gap:12px;justify-content:flex-end;">
         <button class="btn btn-outline" onclick="clearAddForm()">Clear</button>
-        <button class="btn btn-gold" onclick="submitCar()" id="submit-btn">🚗 Add to Inventory</button>
+        <button class="btn btn-gold" onclick="submitCar()" id="submit-btn">&#x1F697; Add to Inventory</button>
       </div>
     </div>
   </main>
 </div>
-
 <!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal" style="width:600px;">
-    <div class="modal-header"><div class="modal-title">Edit Vehicle</div><button class="modal-close" onclick="closeModal('edit-modal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Edit Vehicle</div><button class="modal-close" onclick="closeModal('edit-modal')">&#x2715;</button></div>
     <div class="modal-body">
       <input type="hidden" id="edit-id"/>
       <div class="form-grid">
@@ -302,10 +313,10 @@
         <div class="form-group full"><label class="form-label">Description</label><textarea class="form-control" id="e-desc"></textarea></div>
       </div>
       <div style="margin-top:16px;">
-        <label class="form-label" style="display:block;margin-bottom:8px;">Photos (uploading new replaces existing)</label>
+        <label class="form-label" style="display:block;margin-bottom:8px;">Photos</label>
         <div class="upload-zone" style="padding:16px;" ondragover="onDragOver(event,'edit-upload-zone')" ondragleave="onDragLeave('edit-upload-zone')" ondrop="onDrop(event,'edit')" id="edit-upload-zone">
           <input type="file" id="edit-img-input" accept="image/*" multiple onchange="onFileSelect(this.files,'edit')"/>
-          <div style="font-size:12px;color:var(--text-muted);">📷 <strong style="color:var(--gold)">Click or drag to add photos</strong> (replaces existing)</div>
+          <div style="font-size:12px;color:var(--text-muted);">&#x1F4F7; <strong style="color:var(--gold)">Click or drag to add photos</strong></div>
         </div>
         <div class="img-count-text" id="edit-img-count"></div>
         <div class="img-preview-grid" id="edit-preview-grid"></div>
@@ -317,11 +328,10 @@
     </div>
   </div>
 </div>
-
 <!-- CONFIRM MODAL -->
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal" style="max-width:400px;">
-    <div class="modal-header"><div class="modal-title" id="confirm-title">Confirm</div><button class="modal-close" onclick="closeModal('confirm-modal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="confirm-title">Confirm</div><button class="modal-close" onclick="closeModal('confirm-modal')">&#x2715;</button></div>
     <div class="modal-body"><p id="confirm-msg" style="font-size:14px;color:var(--text-muted);line-height:1.6;"></p></div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('confirm-modal')">Cancel</button>
@@ -329,407 +339,178 @@
     </div>
   </div>
 </div>
-
 <div class="toast-wrap" id="toasts"></div>
-
+<div class="action-toast" id="action-toast">
+  <div class="at-icon" id="at-icon"></div>
+  <div class="at-label" id="at-label"></div>
+  <div class="at-word" id="at-word"></div>
+</div>
 <script>
-/* ═══════════════════════════════════════════════════════════════
-   iOS SAFARI AGGRESSIVE FIELD-READ SYSTEM  (v3)
-   ═══════════════════════════════════════════════════════════════
-   Root cause: iOS Safari does not commit a field's typed value
-   to element.value until that field loses focus.  Number inputs
-   are the worst offenders.  Two additional root causes fixed here:
-
-   FIX A — type="text" + inputmode="numeric"
-     All numeric fields are now type="text" so iOS never withholds
-     the value waiting for a number-keyboard dismiss.
-
-   FIX B — 3-layer aggressive read
-     Layer 1: live keystroke snapshot (_snap{}) — saved on every
-              input/change/keyup/paste so we always have the latest
-              value the user typed, even if iOS hasn't committed it.
-     Layer 2: force-blur every input on the page, giving iOS the
-              signal to flush its pending value commits.
-     Layer 3: wait 150 ms, then re-read all fields post-blur.
-     Merge:   post-blur value  →  pre-blur snapshot  →  keystroke
-              snapshot  →  ''  (take the first non-empty one).
-
-   FIX C — green flash on captured required fields
-     When the button is tapped, each required field that was
-     successfully read flashes green so the user can visually
-     confirm their values were captured.
-   ═══════════════════════════════════════════════════════════════ */
-
-const _snap = {};
-
-function _initSnapshots() {
+const _snap={};
+function _initSnapshots(){
   document.querySelectorAll('.form-control').forEach(_attachSnap);
-  new MutationObserver(muts => {
-    muts.forEach(m => m.addedNodes.forEach(n => {
-      if (n.querySelectorAll) n.querySelectorAll('.form-control').forEach(_attachSnap);
-    }));
-  }).observe(document.body, { childList: true, subtree: true });
+  new MutationObserver(muts=>{muts.forEach(m=>m.addedNodes.forEach(n=>{if(n.querySelectorAll)n.querySelectorAll('.form-control').forEach(_attachSnap);}));}).observe(document.body,{childList:true,subtree:true});
 }
-
-function _attachSnap(el) {
-  if (!el.id || el._snapAttached) return;
-  el._snapAttached = true;
-  const save = () => { const v = el.value; if (v !== undefined) _snap[el.id] = v; };
-  ['input','change','keyup','keydown','paste','compositionend'].forEach(ev =>
-    el.addEventListener(ev, save, { passive: true })
-  );
+function _attachSnap(el){
+  if(!el.id||el._snapAttached)return;el._snapAttached=true;
+  const save=()=>{const v=el.value;if(v!==undefined)_snap[el.id]=v;};
+  ['input','change','keyup','keydown','paste','compositionend'].forEach(ev=>el.addEventListener(ev,save,{passive:true}));
 }
-
-async function _safeRead(ids) {
-  // Layer 1 — snapshot before anything changes
-  const pre = {};
-  ids.forEach(id => { const el = document.getElementById(id); pre[id] = el ? el.value : ''; });
-
-  // Layer 2 — force-blur everything
-  document.querySelectorAll('input, select, textarea').forEach(el => { try { el.blur(); } catch(e){} });
-  try { if (document.activeElement) document.activeElement.blur(); } catch(e){}
-
-  // Layer 3 — wait then re-read
-  await new Promise(r => setTimeout(r, 150));
-
-  const post = {};
-  ids.forEach(id => { const el = document.getElementById(id); post[id] = el ? el.value : ''; });
-
-  // Merge layers
-  const out = {};
-  ids.forEach(id => {
-    out[id] = ((post[id]||'').trim() || (pre[id]||'').trim() || (_snap[id]||'').trim()).trim();
-  });
+async function _safeRead(ids){
+  const pre={};ids.forEach(id=>{const el=document.getElementById(id);pre[id]=el?el.value:'';});
+  document.querySelectorAll('input,select,textarea').forEach(el=>{try{el.blur();}catch(e){}});
+  try{if(document.activeElement)document.activeElement.blur();}catch(e){}
+  await new Promise(r=>setTimeout(r,150));
+  const post={};ids.forEach(id=>{const el=document.getElementById(id);post[id]=el?el.value:'';});
+  const out={};ids.forEach(id=>{out[id]=((post[id]||'').trim()||(pre[id]||'').trim()||(_snap[id]||'').trim()).trim();});
   return out;
 }
+function _flashGreen(id){const el=document.getElementById(id);if(!el)return;el.classList.add('captured');setTimeout(()=>el.classList.remove('captured'),900);}
+function _stripNonNumeric(v){return v?v.replace(/[^0-9.]/g,''):'';}
 
-function _flashGreen(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('captured');
-  setTimeout(() => el.classList.remove('captured'), 900);
+let _atTimer=null;
+function showActionToast(icon,label,word,colorCls='gold',duration=1700){
+  const t=document.getElementById('action-toast');
+  document.getElementById('at-icon').textContent=icon;
+  document.getElementById('at-label').textContent=label;
+  const w=document.getElementById('at-word');w.textContent=word;w.className='at-word '+colorCls;
+  t.classList.add('show');
+  if(_atTimer)clearTimeout(_atTimer);
+  _atTimer=setTimeout(()=>t.classList.remove('show'),duration);
 }
 
-function _stripNonNumeric(v) { return v ? v.replace(/[^0-9.]/g, '') : ''; }
-
-/* ── SIDEBAR ── */
 function toggleSidebar(){
   const sb=document.getElementById('sidebar'),ov=document.getElementById('sidebar-overlay'),hb=document.getElementById('hamburger');
-  const o=sb.classList.toggle('open');
-  ov.classList.toggle('open',o);hb.classList.toggle('open',o);
-  document.body.style.overflow=o?'hidden':'';
+  const o=sb.classList.toggle('open');ov.classList.toggle('open',o);hb.classList.toggle('open',o);document.body.style.overflow=o?'hidden':'';
 }
 function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-  document.body.style.overflow='';
+  document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('open');document.getElementById('hamburger').classList.remove('open');document.body.style.overflow='';
 }
 
-const API='/api';
-let allCars=[],soldCars=[],addImages=[],editImages=[];
-
-const pageMeta={
-  dashboard:{title:'Dashboard',sub:"Welcome back — here's your fleet overview"},
-  inventory:{title:'Inventory',sub:'Manage your available stock'},
-  sold:{title:'Sold Cars',sub:'All closed deals and revenue'},
-  'add-car':{title:'Add Vehicle',sub:'List a new car to your inventory'}
-};
+const API='/api';let allCars=[],soldCars=[],addImages=[],editImages=[];
+const pageMeta={dashboard:{title:'Dashboard',sub:"Welcome back — here's your fleet overview"},inventory:{title:'Inventory',sub:'Manage your available stock'},sold:{title:'Sold Cars',sub:'All closed deals and revenue'},'add-car':{title:'Add Vehicle',sub:'List a new car to your inventory'}};
 
 function navigate(pg){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+pg).classList.add('active');
-  const el=document.querySelector(`.nav-item[onclick="navigate('${pg}')"]`);
-  if(el)el.classList.add('active');
-  const m=pageMeta[pg]||{};
-  document.getElementById('page-title').textContent=m.title||pg;
-  document.getElementById('page-sub').textContent=m.sub||'';
-  if(pg==='dashboard')loadDashboard();
-  if(pg==='inventory')loadInventory();
-  if(pg==='sold')loadSold();
-  closeSidebar();
+  const el=document.querySelector('.nav-item[onclick="navigate(\''+pg+'\')"]');if(el)el.classList.add('active');
+  const m=pageMeta[pg]||{};document.getElementById('page-title').textContent=m.title||pg;document.getElementById('page-sub').textContent=m.sub||'';
+  if(pg==='dashboard')loadDashboard();if(pg==='inventory')loadInventory();if(pg==='sold')loadSold();closeSidebar();
 }
 async function loadAll(){await Promise.all([loadStats(),loadInventory(),loadSold()]);}
-
 async function loadStats(){
   try{
-    const[sr,ar]=await Promise.all([fetch(`${API}/sold`),fetch(`${API}/cars`)]);
-    soldCars=await sr.json();allCars=await ar.json();
-    const rev=soldCars.reduce((s,c)=>s+(c.price||0),0);
-    const avg=allCars.length?allCars.reduce((s,c)=>s+(c.price||0),0)/allCars.length:0;
-    document.getElementById('stat-available').textContent=allCars.length;
-    document.getElementById('stat-sold').textContent=soldCars.length;
-    document.getElementById('stat-revenue').textContent=fmtP(rev);
-    document.getElementById('stat-avg').textContent=fmtP(Math.round(avg));
-    document.getElementById('inv-badge').textContent=allCars.length;
-    document.getElementById('sold-badge').textContent=soldCars.length;
+    const[sr,ar]=await Promise.all([fetch(API+'/sold'),fetch(API+'/cars')]);soldCars=await sr.json();allCars=await ar.json();
+    const rev=soldCars.reduce((s,c)=>s+(c.price||0),0),avg=allCars.length?allCars.reduce((s,c)=>s+(c.price||0),0)/allCars.length:0;
+    document.getElementById('stat-available').textContent=allCars.length;document.getElementById('stat-sold').textContent=soldCars.length;
+    document.getElementById('stat-revenue').textContent=fmtP(rev);document.getElementById('stat-avg').textContent=fmtP(Math.round(avg));
+    document.getElementById('inv-badge').textContent=allCars.length;document.getElementById('sold-badge').textContent=soldCars.length;
   }catch(e){console.error(e);}
 }
-
 async function loadDashboard(){
   await loadStats();
   const c=document.getElementById('recent-sales');
-  c.innerHTML=soldCars.length?soldCars.slice(0,5).map(s=>`
-    <div class="activity-item">
-      <div class="activity-icon">🚗</div>
-      <div class="activity-text"><div class="activity-title">${s.year||''} ${s.make} ${s.model}</div>
-      <div class="activity-sub">Sold ${s.soldDate?new Date(s.soldDate).toLocaleDateString('en-GB'):'—'}</div></div>
-      <div class="activity-price">${fmtP(s.price)}</div>
-    </div>`).join(''):`<div class="empty-state"><div class="empty-icon">📋</div><p>No sales yet</p></div>`;
+  c.innerHTML=soldCars.length?soldCars.slice(0,5).map(s=>'<div class="activity-item"><div class="activity-icon">&#x1F697;</div><div class="activity-text"><div class="activity-title">'+s.year+' '+s.make+' '+s.model+'</div><div class="activity-sub">Sold '+(s.soldDate?new Date(s.soldDate).toLocaleDateString('en-GB'):'&#x2014;')+'</div></div><div class="activity-price">'+fmtP(s.price)+'</div></div>').join(''):'<div class="empty-state"><div class="empty-icon">&#x1F4CB;</div><p>No sales yet</p></div>';
   const chart=document.getElementById('bar-chart');
-  if(!allCars.length){chart.innerHTML=`<div class="empty-state" style="width:100%"><div class="empty-icon">📊</div><p>No data</p></div>`;return;}
-  const top=[...allCars].sort((a,b)=>b.price-a.price).slice(0,6);
-  const mx=Math.max(...top.map(c=>c.price));
-  chart.innerHTML=top.map(c=>`<div class="bar-col"><div class="bar" style="height:${Math.max(10,Math.round((c.price/mx)*100))}%" title="${c.make} ${c.model} — ${fmtP(c.price)}"></div><div class="bar-label">${c.make.slice(0,4)}</div></div>`).join('');
+  if(!allCars.length){chart.innerHTML='<div class="empty-state" style="width:100%"><div class="empty-icon">&#x1F4CA;</div><p>No data</p></div>';return;}
+  const top=[...allCars].sort((a,b)=>b.price-a.price).slice(0,6),mx=Math.max(...top.map(c=>c.price));
+  chart.innerHTML=top.map(c=>'<div class="bar-col"><div class="bar" style="height:'+Math.max(10,Math.round((c.price/mx)*100))+'%" title="'+c.make+' '+c.model+'"></div><div class="bar-label">'+c.make.slice(0,4)+'</div></div>').join('');
 }
-
 async function loadInventory(){
-  try{const r=await fetch(`${API}/cars`);allCars=await r.json();renderInv(allCars);document.getElementById('inv-badge').textContent=allCars.length;}
+  try{const r=await fetch(API+'/cars');allCars=await r.json();renderInv(allCars);document.getElementById('inv-badge').textContent=allCars.length;}
   catch(e){toast('Failed to load inventory','error');}
 }
 function renderInv(cars){
-  const t=document.getElementById('inv-tbody');
-  if(!cars.length){t.innerHTML=`<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🚗</div><p>No cars</p></div></td></tr>`;return;}
-  t.innerHTML=cars.map(c=>{
-    const img=(c.images&&c.images[0])||c.image;
-    return`<tr>
-      <td><div style="display:flex;align-items:center;gap:12px;">
-        <div class="car-thumb">${img?`<img src="${img}" onerror="this.parentElement.textContent='🚗'"/>`:'🚗'}</div>
-        <div><div class="car-name">${c.make} ${c.model}</div><div class="car-sub">${c.images?c.images.length+' photo(s)':''}</div></div>
-      </div></td>
-      <td>${c.year||'—'}</td><td>${c.mileage?c.mileage.toLocaleString()+' km':'—'}</td><td>${c.color||'—'}</td>
-      <td><div class="price-tag">${fmtP(c.price)}</div></td>
-      <td><span class="badge badge-available"><span class="badge-dot"></span>Available</span></td>
-      <td><div class="action-btns">
-        <button class="btn btn-outline btn-sm" onclick="openEdit('${c.id||c._id}')">✏️ Edit</button>
-        <button class="btn btn-gold btn-sm" onclick="confirmSell('${c.id||c._id}','${c.make} ${c.model}')">💰 Sell</button>
-        <button class="btn btn-danger btn-sm" onclick="confirmDelete('${c.id||c._id}','${c.make} ${c.model}')">🗑</button>
-      </div></td>
-    </tr>`;
-  }).join('');
+  const t=document.getElementById('inv-tbody'),mc=document.getElementById('inv-cards');
+  if(!cars.length){
+    t.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">&#x1F697;</div><p>No cars</p></div></td></tr>';
+    mc.innerHTML='<div class="empty-state"><div class="empty-icon">&#x1F697;</div><p>No cars in inventory</p></div>';return;
+  }
+  t.innerHTML=cars.map(c=>{const img=(c.images&&c.images[0])||c.image;return'<tr><td><div style="display:flex;align-items:center;gap:12px;"><div class="car-thumb">'+(img?'<img src="'+img+'" onerror="this.parentElement.textContent=\'&#x1F697;\'">'  :'&#x1F697;')+'</div><div><div class="car-name">'+c.make+' '+c.model+'</div><div class="car-sub">'+(c.images?c.images.length+' photo(s)':'')+'</div></div></div></td><td>'+(c.year||'&#x2014;')+'</td><td>'+(c.mileage?c.mileage.toLocaleString()+' km':'&#x2014;')+'</td><td>'+(c.color||'&#x2014;')+'</td><td><div class="price-tag">'+fmtP(c.price)+'</div></td><td><span class="badge badge-available"><span class="badge-dot"></span>Available</span></td><td><div class="action-btns"><button class="btn btn-outline btn-sm" onclick="openEdit(\''+((c.id||c._id))+'\')">&#x270F;&#xFE0F; Edit</button><button class="btn btn-gold btn-sm" onclick="confirmSell(\''+((c.id||c._id))+'\',\''+c.make+' '+c.model+'\')">&#x1F4B0; Sell</button><button class="btn btn-danger btn-sm" onclick="confirmDelete(\''+((c.id||c._id))+'\',\''+c.make+' '+c.model+'\')">&#x1F5D1;</button></div></td></tr>';}).join('');
+  mc.innerHTML=cars.map(c=>{const img=(c.images&&c.images[0])||c.image;const id=c.id||c._id;return'<div class="car-card"><div class="cc-row"><div class="cc-thumb">'+(img?'<img src="'+img+'" onerror="this.parentElement.textContent=\'&#x1F697;\'"/>'  :'&#x1F697;')+'</div><div class="cc-info"><div class="cc-name">'+c.make+' '+c.model+'</div><div class="cc-meta">'+(c.year||'&#x2014;')+' &middot; '+(c.color||'&#x2014;')+' &middot; '+(c.mileage?c.mileage.toLocaleString()+' km':'&#x2014;')+'</div><div class="cc-price">'+fmtP(c.price)+'</div></div><span class="badge badge-available"><span class="badge-dot"></span>Available</span></div><div class="cc-footer"><div class="cc-actions"><button class="btn btn-outline btn-sm" onclick="openEdit(\''+id+'\')">&#x270F;&#xFE0F; Edit</button><button class="btn btn-gold btn-sm" onclick="confirmSell(\''+id+'\',\''+c.make+' '+c.model+'\')">&#x1F4B0; Sell</button><button class="btn btn-danger btn-sm" onclick="confirmDelete(\''+id+'\',\''+c.make+' '+c.model+'\')">&#x1F5D1; Delete</button></div></div></div>';}).join('');
 }
-function filterTable(q){renderInv(allCars.filter(c=>`${c.make} ${c.model} ${c.color||''} ${c.year||''}`.toLowerCase().includes(q.toLowerCase())));}
+function filterTable(q){renderInv(allCars.filter(c=>(c.make+' '+c.model+' '+(c.color||'')+' '+(c.year||'')).toLowerCase().includes(q.toLowerCase())));}
 function handleGlobalSearch(q){if(document.querySelector('.page.active').id==='page-inventory')filterTable(q);}
-
 async function loadSold(){
   try{
-    const r=await fetch(`${API}/sold`);soldCars=await r.json();
+    const r=await fetch(API+'/sold');soldCars=await r.json();
     document.getElementById('sold-badge').textContent=soldCars.length;
     const total=soldCars.reduce((s,c)=>s+(c.price||0),0);
-    const re=document.getElementById('total-revenue-display');
-    if(re)re.textContent=`Total Revenue: ${fmtP(total)}`;
-    const t=document.getElementById('sold-tbody');
-    if(!soldCars.length){t.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💰</div><p>No sold cars yet</p></div></td></tr>`;return;}
-    t.innerHTML=soldCars.map(c=>{
-      const img=(c.images&&c.images[0])||c.image;
-      return`<tr>
-        <td><div style="display:flex;align-items:center;gap:12px;">
-          <div class="car-thumb">${img?`<img src="${img}" onerror="this.parentElement.textContent='🚗'"/>`:'🚗'}</div>
-          <div><div class="car-name">${c.make} ${c.model}</div></div>
-        </div></td>
-        <td>${c.year||'—'}</td><td>${c.color||'—'}</td>
-        <td><div class="price-tag">${fmtP(c.price)}</div></td>
-        <td>${c.soldDate?new Date(c.soldDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—'}</td>
-        <td><div class="action-btns">
-          <span class="badge badge-sold"><span class="badge-dot"></span>Sold</span>
-          <button class="btn btn-outline btn-sm" onclick="confirmRestore('${c.id||c._id}','${c.make} ${c.model}')">♻️ Restore</button>
-        </div></td>
-      </tr>`;
-    }).join('');
+    const re=document.getElementById('total-revenue-display');if(re)re.textContent='Total Revenue: '+fmtP(total);
+    const t=document.getElementById('sold-tbody'),mc=document.getElementById('sold-cards');
+    if(!soldCars.length){
+      t.innerHTML='<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">&#x1F4B0;</div><p>No sold cars yet</p></div></td></tr>';
+      mc.innerHTML='<div class="empty-state"><div class="empty-icon">&#x1F4B0;</div><p>No sold cars yet</p></div>';return;
+    }
+    t.innerHTML=soldCars.map(c=>{const img=(c.images&&c.images[0])||c.image;return'<tr><td><div style="display:flex;align-items:center;gap:12px;"><div class="car-thumb">'+(img?'<img src="'+img+'" onerror="this.parentElement.textContent=\'&#x1F697;\'">'  :'&#x1F697;')+'</div><div><div class="car-name">'+c.make+' '+c.model+'</div></div></div></td><td>'+(c.year||'&#x2014;')+'</td><td>'+(c.color||'&#x2014;')+'</td><td><div class="price-tag">'+fmtP(c.price)+'</div></td><td>'+(c.soldDate?new Date(c.soldDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'&#x2014;')+'</td><td><div class="action-btns"><span class="badge badge-sold"><span class="badge-dot"></span>Sold</span><button class="btn btn-outline btn-sm" onclick="confirmRestore(\''+((c.id||c._id))+'\',\''+c.make+' '+c.model+'\')">&#x267B;&#xFE0F; Restore</button></div></td></tr>';}).join('');
+    mc.innerHTML=soldCars.map(c=>{const img=(c.images&&c.images[0])||c.image;const id=c.id||c._id;return'<div class="car-card"><div class="cc-row"><div class="cc-thumb">'+(img?'<img src="'+img+'" onerror="this.parentElement.textContent=\'&#x1F697;\'"/>'  :'&#x1F697;')+'</div><div class="cc-info"><div class="cc-name">'+c.make+' '+c.model+'</div><div class="cc-meta">'+(c.year||'&#x2014;')+' &middot; '+(c.color||'&#x2014;')+'</div><div class="cc-price">'+fmtP(c.price)+'</div></div><span class="badge badge-sold"><span class="badge-dot"></span>Sold</span></div><div class="cc-footer"><span style="font-size:11px;color:var(--text-dim);">'+(c.soldDate?new Date(c.soldDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'&#x2014;')+'</span><div class="cc-actions"><button class="btn btn-outline btn-sm" onclick="confirmRestore(\''+id+'\',\''+c.make+' '+c.model+'\')">&#x267B;&#xFE0F; Restore</button></div></div></div>';}).join('');
   }catch(e){toast('Failed to load sold cars','error');}
 }
-
-/* ── IMAGE HANDLING ── */
 function onDragOver(e,zoneId){e.preventDefault();document.getElementById(zoneId).classList.add('drag-over');}
 function onDragLeave(zoneId){document.getElementById(zoneId).classList.remove('drag-over');}
 function onDrop(e,type){e.preventDefault();const id=type==='add'?'add-upload-zone':'edit-upload-zone';document.getElementById(id).classList.remove('drag-over');onFileSelect(e.dataTransfer.files,type);}
 function onFileSelect(files,type){
-  const current=type==='add'?addImages:editImages;
-  const remaining=10-current.length;
-  if(remaining<=0){toast('Max 10 images allowed','error');return;}
-  const toProcess=Math.min(files.length,remaining);
-  let done=0;
-  Array.from(files).slice(0,toProcess).forEach(file=>{
-    const reader=new FileReader();
-    reader.onload=e=>{current.push(e.target.result);done++;if(done===toProcess)renderPreviews(type);};
-    reader.readAsDataURL(file);
-  });
+  const current=type==='add'?addImages:editImages,remaining=10-current.length;
+  if(remaining<=0){toast('Max 10 images','error');return;}
+  const toProcess=Math.min(files.length,remaining);let done=0;
+  Array.from(files).slice(0,toProcess).forEach(file=>{const reader=new FileReader();reader.onload=e=>{current.push(e.target.result);done++;if(done===toProcess)renderPreviews(type);};reader.readAsDataURL(file);});
 }
 function renderPreviews(type){
-  const imgs=type==='add'?addImages:editImages;
-  const grid=document.getElementById(type+'-preview-grid');
-  const count=document.getElementById(type+'-img-count');
-  count.textContent=`${imgs.length} / 10 images selected`;
-  grid.innerHTML=imgs.map((img,i)=>`
-    <div class="img-preview-item">
-      <img src="${img}" alt="img ${i+1}"/>
-      ${i===0?'<div class="img-primary-badge">PRIMARY</div>':''}
-      <button class="img-remove-btn" onclick="removeImg(${i},'${type}')">✕</button>
-    </div>`).join('');
+  const imgs=type==='add'?addImages:editImages,grid=document.getElementById(type+'-preview-grid'),count=document.getElementById(type+'-img-count');
+  count.textContent=imgs.length+' / 10 images selected';
+  grid.innerHTML=imgs.map((img,i)=>'<div class="img-preview-item"><img src="'+img+'" alt="img '+(i+1)+'">'+(i===0?'<div class="img-primary-badge">PRIMARY</div>':'')+'<button class="img-remove-btn" onclick="removeImg('+i+',\''+type+'\')">&#x2715;</button></div>').join('');
 }
-function removeImg(idx,type){
-  if(type==='add')addImages.splice(idx,1);else editImages.splice(idx,1);
-  renderPreviews(type);
-}
-
-/* ══════════════════════════════════════════════════════
-   ADD CAR — aggressive 3-layer iOS read
-   ══════════════════════════════════════════════════════ */
+function removeImg(idx,type){if(type==='add')addImages.splice(idx,1);else editImages.splice(idx,1);renderPreviews(type);}
 async function submitCar(){
-  const btn=document.getElementById('submit-btn');
-  btn.textContent='⏳ Reading fields…';
-  btn.disabled=true;
-
-  const ids=['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'];
-  const f=await _safeRead(ids);
-
-  const make=f['f-make'], model=f['f-model'], price=_stripNonNumeric(f['f-price']);
-
-  // Flash green on successfully-read required fields
-  if(make)  _flashGreen('f-make');
-  if(model) _flashGreen('f-model');
-  if(price) _flashGreen('f-price');
-
-  if(!make||!model||!price){
-    const missing=[];
-    if(!make)  missing.push('Make');
-    if(!model) missing.push('Model');
-    if(!price) missing.push('Price');
-    toast('❌ Missing: '+missing.join(', '),'error');
-    btn.textContent='🚗 Add to Inventory';
-    btn.disabled=false;
-    return;
-  }
-
-  btn.textContent='⏳ Saving…';
+  const btn=document.getElementById('submit-btn');btn.textContent='&#x23F3; Reading...';btn.disabled=true;
+  const ids=['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'],f=await _safeRead(ids);
+  const make=f['f-make'],model=f['f-model'],price=_stripNonNumeric(f['f-price']);
+  if(make)_flashGreen('f-make');if(model)_flashGreen('f-model');if(price)_flashGreen('f-price');
+  if(!make||!model||!price){const miss=[];if(!make)miss.push('Make');if(!model)miss.push('Model');if(!price)miss.push('Price');toast('Missing: '+miss.join(', '),'error');btn.textContent='&#x1F697; Add to Inventory';btn.disabled=false;return;}
+  btn.textContent='&#x23F3; Saving...';
   try{
-    const body={
-      make, model,
-      year:        f['f-year']    ? Number(_stripNonNumeric(f['f-year']))    : null,
-      price:       Number(price),
-      mileage:     f['f-mileage'] ? Number(_stripNonNumeric(f['f-mileage'])) : null,
-      color:       f['f-color'],
-      description: f['f-desc'],
-      images:      addImages,
-      image:       addImages[0]||null
-    };
-    const r=await fetch(`${API}/cars`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Server error');
-    toast(`✅ ${make} ${model} added!`,'success');
-    clearAddForm();loadStats();
-  }catch(e){toast(e.message||'Failed to add car','error');}
-  finally{btn.textContent='🚗 Add to Inventory';btn.disabled=false;}
+    const body={make,model,year:f['f-year']?Number(_stripNonNumeric(f['f-year'])):null,price:Number(price),mileage:f['f-mileage']?Number(_stripNonNumeric(f['f-mileage'])):null,color:f['f-color'],description:f['f-desc'],images:addImages,image:addImages[0]||null};
+    const r=await fetch(API+'/cars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d=await r.json();if(!r.ok)throw new Error(d.error||'Server error');
+    showActionToast('\u{1F697}','Vehicle','Added!','gold');clearAddForm();loadStats();
+  }catch(e){toast(e.message||'Failed','error');}
+  finally{btn.textContent='\u{1F697} Add to Inventory';btn.disabled=false;}
 }
-
-function clearAddForm(){
-  ['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.value='';delete _snap[id];}
-  });
-  addImages=[];renderPreviews('add');
-  document.getElementById('add-img-input').value='';
-}
-
-/* ══════════════════════════════════════════════════════
-   EDIT CAR — aggressive 3-layer iOS read
-   ══════════════════════════════════════════════════════ */
+function clearAddForm(){['f-make','f-model','f-year','f-color','f-price','f-mileage','f-desc'].forEach(id=>{const el=document.getElementById(id);if(el){el.value='';delete _snap[id];}});addImages=[];renderPreviews('add');document.getElementById('add-img-input').value='';}
 async function openEdit(id){
   try{
-    const r=await fetch(`${API}/cars/${id}`);
-    const c=await r.json();
+    const r=await fetch(API+'/cars/'+id),c=await r.json();
     document.getElementById('edit-id').value=c.id||c._id;
-    const vals={
-      'e-make':c.make||'','e-model':c.model||'','e-year':c.year||'',
-      'e-color':c.color||'','e-price':c.price||'','e-mileage':c.mileage||'',
-      'e-desc':c.description||''
-    };
-    Object.entries(vals).forEach(([id,v])=>{
-      const el=document.getElementById(id);
-      if(el){el.value=v;_snap[id]=String(v);}  // seed snap with loaded values
-    });
-    editImages=c.images&&c.images.length?[...c.images]:(c.image?[c.image]:[]);
-    renderPreviews('edit');
-    openModal('edit-modal');
+    const vals={'e-make':c.make||'','e-model':c.model||'','e-year':c.year||'','e-color':c.color||'','e-price':c.price||'','e-mileage':c.mileage||'','e-desc':c.description||''};
+    Object.entries(vals).forEach(([id,v])=>{const el=document.getElementById(id);if(el){el.value=v;_snap[id]=String(v);}});
+    editImages=c.images&&c.images.length?[...c.images]:(c.image?[c.image]:[]);renderPreviews('edit');openModal('edit-modal');
   }catch(e){toast('Failed to load car','error');}
 }
-
 async function saveEdit(){
-  const saveBtn=document.querySelector('#edit-modal .btn-gold');
-  if(saveBtn){saveBtn.textContent='⏳ Reading fields…';saveBtn.disabled=true;}
-
-  const ids=['e-make','e-model','e-year','e-color','e-price','e-mileage','e-desc'];
-  const f=await _safeRead(ids);
-  const id=document.getElementById('edit-id').value;
-
-  // Flash required fields
+  const saveBtn=document.querySelector('#edit-modal .btn-gold');if(saveBtn){saveBtn.textContent='Reading...';saveBtn.disabled=true;}
+  const ids=['e-make','e-model','e-year','e-color','e-price','e-mileage','e-desc'],f=await _safeRead(ids),id=document.getElementById('edit-id').value;
   ['e-make','e-model','e-price'].forEach(fid=>{if(f[fid])_flashGreen(fid);});
-
-  const body={
-    make:        f['e-make'],
-    model:       f['e-model'],
-    year:        f['e-year']    ? Number(_stripNonNumeric(f['e-year']))    : null,
-    color:       f['e-color'],
-    price:       f['e-price']   ? Number(_stripNonNumeric(f['e-price']))   : null,
-    mileage:     f['e-mileage'] ? Number(_stripNonNumeric(f['e-mileage'])) : null,
-    description: f['e-desc'],
-    images:      editImages,
-    image:       editImages[0]||null
-  };
-
+  const body={make:f['e-make'],model:f['e-model'],year:f['e-year']?Number(_stripNonNumeric(f['e-year'])):null,color:f['e-color'],price:f['e-price']?Number(_stripNonNumeric(f['e-price'])):null,mileage:f['e-mileage']?Number(_stripNonNumeric(f['e-mileage'])):null,description:f['e-desc'],images:editImages,image:editImages[0]||null};
   try{
-    const r=await fetch(`${API}/cars/${id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!r.ok)throw new Error('Update failed');
-    toast('✅ Car updated','success');
-    closeModal('edit-modal');loadInventory();
+    const r=await fetch(API+'/cars/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('Update failed');closeModal('edit-modal');loadInventory();showActionToast('\u270F\uFE0F','Vehicle','Updated','gold');
   }catch(e){toast(e.message||'Update failed','error');}
   finally{if(saveBtn){saveBtn.textContent='Save Changes';saveBtn.disabled=false;}}
 }
-
-/* ── SELL / DELETE / RESTORE ── */
-function confirmSell(id,name){
-  showConfirm('💰 Mark as Sold',`Mark <strong>${name}</strong> as sold?`,async()=>{
-    try{await fetch(`${API}/sell`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});toast(`💰 ${name} sold!`,'success');loadInventory();loadStats();}
-    catch(e){toast('Failed','error');}
-  },'btn-gold');
-}
-function confirmDelete(id,name){
-  showConfirm('🗑 Delete',`Permanently delete <strong>${name}</strong>?`,async()=>{
-    try{await fetch(`${API}/cars/${id}`,{method:'DELETE'});toast(`🗑 ${name} deleted`,'success');loadInventory();loadStats();}
-    catch(e){toast('Failed','error');}
-  },'btn-danger');
-}
-function confirmRestore(id,name){
-  showConfirm('♻️ Restore',`Restore <strong>${name}</strong> to inventory?`,async()=>{
-    try{await fetch(`${API}/restore`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});toast(`♻️ ${name} restored`,'success');loadSold();loadStats();}
-    catch(e){toast('Failed','error');}
-  },'btn-gold');
-}
-
+function confirmSell(id,name){showConfirm('\u{1F4B0} Mark as Sold','Mark <strong>'+name+'</strong> as sold?',async()=>{try{await fetch(API+'/sell',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});loadInventory();loadStats();showActionToast('\u{1F4B0}','Vehicle','Sold!','gold');}catch(e){toast('Failed','error');}},'btn-gold');}
+function confirmDelete(id,name){showConfirm('\u{1F5D1} Delete','Permanently delete <strong>'+name+'</strong>?',async()=>{try{await fetch(API+'/cars/'+id,{method:'DELETE'});loadInventory();loadStats();showActionToast('\u{1F5D1}\uFE0F','Vehicle','Deleted','gold');}catch(e){toast('Failed','error');}},'btn-danger');}
+function confirmRestore(id,name){showConfirm('\u267B\uFE0F Restore','Restore <strong>'+name+'</strong> to inventory?',async()=>{try{await fetch(API+'/restore',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});loadSold();loadStats();showActionToast('\u267B\uFE0F','Vehicle','Restored','success');}catch(e){toast('Failed','error');}},'btn-gold');}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function showConfirm(title,msg,fn,btnClass='btn-gold'){
-  document.getElementById('confirm-title').textContent=title;
-  document.getElementById('confirm-msg').innerHTML=msg;
-  const btn=document.getElementById('confirm-btn');
-  btn.className=`btn ${btnClass}`;btn.textContent='Confirm';
-  btn.onclick=()=>{closeModal('confirm-modal');fn();};
-  openModal('confirm-modal');
+  document.getElementById('confirm-title').textContent=title;document.getElementById('confirm-msg').innerHTML=msg;
+  const btn=document.getElementById('confirm-btn');btn.className='btn '+btnClass;btn.textContent='Confirm';btn.onclick=()=>{closeModal('confirm-modal');fn();};openModal('confirm-modal');
 }
-function toast(msg,type='success'){
-  const w=document.getElementById('toasts');
-  const el=document.createElement('div');el.className=`toast ${type}`;
-  el.innerHTML=`<span>${type==='success'?'✅':'❌'}</span> ${msg}`;
-  w.appendChild(el);setTimeout(()=>el.remove(),3500);
-}
-function fmtP(n){return(!n&&n!==0)?'—':'K '+Number(n).toLocaleString('en-ZM');}
-
+function toast(msg,type='success'){const w=document.getElementById('toasts'),el=document.createElement('div');el.className='toast '+type;el.innerHTML='<span>'+(type==='success'?'&#x2705;':'&#x274C;')+'</span> '+msg;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
+function fmtP(n){return(!n&&n!==0)?'&#x2014;':'K '+Number(n).toLocaleString('en-ZM');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar();});
-
-// Boot
-_initSnapshots();
-loadDashboard();
+_initSnapshots();loadDashboard();
 </script>
 </body>
 </html>
