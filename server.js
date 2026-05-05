@@ -165,7 +165,6 @@ const enquirySchema = new mongoose.Schema({
     createdAt: { type: String, default: () => new Date().toISOString() }
 });
 
-// ── PRE-ORDER SCHEMA ──────────────────────────────────────
 const preOrderSchema = new mongoose.Schema({
     name:         { type: String, required: true },
     phone:        String,
@@ -173,16 +172,15 @@ const preOrderSchema = new mongoose.Schema({
     make:         { type: String, required: true },
     model:        { type: String, required: true },
     year:         String,
-    spec:         String,   // e.g. "GCC", "Japanese", "US"
+    spec:         String,
     transmission: String,
     color1:       String,
     color2:       String,
     budget:       String,
     extraNotes:   String,
-    status:       { type: String, default: 'new' }, // new | contacted | fulfilled
+    status:       { type: String, default: 'new' },
     createdAt:    { type: String, default: () => new Date().toISOString() }
 });
-// ─────────────────────────────────────────────────────────
 
 const Car      = mongoose.model('Car', carSchema);
 const Enquiry  = mongoose.model('Enquiry', enquirySchema);
@@ -297,13 +295,13 @@ app.post('/api/cars', requireAdmin, async (req, res) => {
 
         const car = await new Car({
             make: make.trim(), model: model.trim(),
-            year:     year     ? Number(year)    : null,
-            price:    Number(price),
-            mileage:  mileage  ? Number(mileage) : null,
+            year:        year        ? Number(year)    : null,
+            price:       Number(price),
+            mileage:     mileage     ? Number(mileage) : null,
             color:       color       || null,
             description: description || null,
-            image:    uploadedImgs[0] || null,
-            images:   uploadedImgs
+            image:       uploadedImgs[0] || null,
+            images:      uploadedImgs
         }).save();
 
         res.status(201).json({ success: true, ...carOut(car) });
@@ -330,8 +328,8 @@ app.put('/api/cars/:id', requireAdmin, async (req, res) => {
             price:    Number(price),
             mileage:  mileage ? Number(mileage) : null,
             color, description,
-            image:  uploadedImgs[0] || null,
-            images: uploadedImgs
+            image:    uploadedImgs[0] || null,
+            images:   uploadedImgs
         });
         res.json({ success: true });
     } catch (err) {
@@ -445,8 +443,6 @@ app.delete('/api/enquiries/:id', requireAdmin, async (req, res) => {
 // =======================
 // PRE-ORDER ROUTES
 // =======================
-
-// Public — customers submit pre-order requests from the website
 app.post('/api/preorders', async (req, res) => {
     try {
         const { name, phone, email, make, model, year, spec, transmission, color1, color2, budget, extraNotes } = req.body;
@@ -469,7 +465,6 @@ app.post('/api/preorders', async (req, res) => {
     }
 });
 
-// Admin — list all pre-orders
 app.get('/api/preorders', requireAdmin, async (req, res) => {
     try {
         const orders = await PreOrder.find().sort({ createdAt: -1 });
@@ -479,7 +474,6 @@ app.get('/api/preorders', requireAdmin, async (req, res) => {
     }
 });
 
-// Admin — get single pre-order
 app.get('/api/preorders/:id', requireAdmin, async (req, res) => {
     try {
         const order = await PreOrder.findById(req.params.id);
@@ -490,13 +484,11 @@ app.get('/api/preorders/:id', requireAdmin, async (req, res) => {
     }
 });
 
-// Admin — update status (new → contacted → fulfilled)
 app.put('/api/preorders/:id/status', requireAdmin, async (req, res) => {
     try {
         const { status } = req.body;
         const allowed = ['new', 'contacted', 'fulfilled'];
         if (!allowed.includes(status)) return res.status(400).json({ error: "Invalid status" });
-
         await PreOrder.findByIdAndUpdate(req.params.id, { status });
         res.json({ success: true });
     } catch (err) {
@@ -504,7 +496,6 @@ app.put('/api/preorders/:id/status', requireAdmin, async (req, res) => {
     }
 });
 
-// Admin — delete pre-order
 app.delete('/api/preorders/:id', requireAdmin, async (req, res) => {
     try {
         await PreOrder.findByIdAndDelete(req.params.id);
@@ -554,6 +545,7 @@ app.get('/api/analytics/conversion', requireAdmin, async (req, res) => {
 
 // =======================
 // STATIC + PAGE ROUTES
+// ⚠️  Named routes MUST come before express.static
 // =======================
 app.get('/', (req, res) => res.redirect('/admin/login'));
 
@@ -572,12 +564,11 @@ app.get('/admin/enquiries', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'que.html'));
 });
 
-// ── Pre-orders page route ──────────────────────────────────
 app.get('/admin/preorders', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'preorders.html'));
 });
-// ─────────────────────────────────────────────────────────
 
+// This MUST stay last — catches all other /admin/* static assets (css, js, images)
 app.use('/admin', requireAdminPage, express.static(path.join(__dirname, 'admin')));
 
 app.use((req, res) => res.status(404).json({ error: `${req.method} ${req.url} not found` }));
