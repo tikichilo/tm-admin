@@ -42,9 +42,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Upload a single base64 or URL image to Cloudinary
 async function uploadImage(imageStr) {
-    // If it's already a Cloudinary URL, skip uploading
     if (imageStr && imageStr.includes('res.cloudinary.com')) return imageStr;
     const result = await cloudinary.uploader.upload(imageStr, {
         folder: 'tmmotors',
@@ -53,7 +51,6 @@ async function uploadImage(imageStr) {
     return result.secure_url;
 }
 
-// Upload an array of images, skip any that fail
 async function uploadImages(imagesArr) {
     const results = [];
     for (const img of imagesArr) {
@@ -67,11 +64,9 @@ async function uploadImages(imagesArr) {
     return results;
 }
 
-// Delete a Cloudinary image by its URL
 async function deleteCloudinaryImage(imageUrl) {
     try {
         if (!imageUrl || !imageUrl.includes('res.cloudinary.com')) return;
-        // Extract public_id from URL e.g. tmmotors/abc123
         const parts = imageUrl.split('/');
         const filename = parts[parts.length - 1].split('.')[0];
         const folder = parts[parts.length - 2];
@@ -83,7 +78,7 @@ async function deleteCloudinaryImage(imageUrl) {
 }
 
 // =======================
-// TRUST PROXY (required on Render for secure cookies)
+// TRUST PROXY
 // =======================
 app.set('trust proxy', 1);
 
@@ -107,7 +102,7 @@ app.use(session({
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        maxAge: 8 * 60 * 60 * 1000  // 8 hours
+        maxAge: 8 * 60 * 60 * 1000
     }
 }));
 
@@ -149,8 +144,8 @@ const carSchema = new mongoose.Schema({
     mileage:     Number,
     color:       String,
     description: String,
-    image:       String,   // Cloudinary URL
-    images:      [String], // Cloudinary URLs
+    image:       String,
+    images:      [String],
     status:      { type: String, default: 'available' },
     soldDate:    String,
     createdAt:   { type: String, default: () => new Date().toISOString() }
@@ -170,8 +165,28 @@ const enquirySchema = new mongoose.Schema({
     createdAt: { type: String, default: () => new Date().toISOString() }
 });
 
-const Car     = mongoose.model('Car', carSchema);
-const Enquiry = mongoose.model('Enquiry', enquirySchema);
+// ── PRE-ORDER SCHEMA ──────────────────────────────────────
+const preOrderSchema = new mongoose.Schema({
+    name:         { type: String, required: true },
+    phone:        String,
+    email:        String,
+    make:         { type: String, required: true },
+    model:        { type: String, required: true },
+    year:         String,
+    spec:         String,   // e.g. "GCC", "Japanese", "US"
+    transmission: String,
+    color1:       String,
+    color2:       String,
+    budget:       String,
+    extraNotes:   String,
+    status:       { type: String, default: 'new' }, // new | contacted | fulfilled
+    createdAt:    { type: String, default: () => new Date().toISOString() }
+});
+// ─────────────────────────────────────────────────────────
+
+const Car      = mongoose.model('Car', carSchema);
+const Enquiry  = mongoose.model('Enquiry', enquirySchema);
+const PreOrder = mongoose.model('PreOrder', preOrderSchema);
 
 function carOut(c) {
     const obj = c.toObject();
@@ -184,6 +199,12 @@ function carOut(c) {
 
 function enqOut(e) {
     const obj = e.toObject();
+    obj.id = obj._id.toString();
+    return obj;
+}
+
+function preOrderOut(p) {
+    const obj = p.toObject();
     obj.id = obj._id.toString();
     return obj;
 }
@@ -202,7 +223,7 @@ function requireAdminPage(req, res, next) {
 }
 
 // =======================
-// HEALTH CHECK (cron ping)
+// HEALTH CHECK
 // =======================
 app.get('/health', async (req, res) => {
     const state = mongoose.connection.readyState;
@@ -266,12 +287,10 @@ app.post('/api/cars', requireAdmin, async (req, res) => {
         const { make, model, year, price, mileage, color, description, image, images } = req.body;
         if (!make || !model || !price) return res.status(400).json({ error: "Make, model, price required" });
 
-        // Collect raw images (base64 or URLs)
         let rawImgs = [];
         if (Array.isArray(images) && images.length) rawImgs = images.slice(0, 10);
         else if (image) rawImgs = [image];
 
-        // Upload all to Cloudinary
         console.log(`⬆️  Uploading ${rawImgs.length} image(s) to Cloudinary...`);
         const uploadedImgs = await uploadImages(rawImgs);
         console.log(`✅ Uploaded ${uploadedImgs.length} image(s)`);
@@ -302,7 +321,6 @@ app.put('/api/cars/:id', requireAdmin, async (req, res) => {
         if (Array.isArray(images) && images.length) rawImgs = images.slice(0, 10);
         else if (image) rawImgs = [image];
 
-        // Upload only new base64 images; keep existing Cloudinary URLs as-is
         console.log(`⬆️  Uploading updated image(s) to Cloudinary...`);
         const uploadedImgs = await uploadImages(rawImgs);
 
@@ -323,7 +341,6 @@ app.put('/api/cars/:id', requireAdmin, async (req, res) => {
 
 app.delete('/api/cars/:id', requireAdmin, async (req, res) => {
     try {
-        // Delete images from Cloudinary before removing from DB
         const car = await Car.findById(req.params.id);
         if (car && car.images && car.images.length) {
             for (const imgUrl of car.images) {
@@ -426,6 +443,78 @@ app.delete('/api/enquiries/:id', requireAdmin, async (req, res) => {
 });
 
 // =======================
+// PRE-ORDER ROUTES
+// =======================
+
+// Public — customers submit pre-order requests from the website
+app.post('/api/preorders', async (req, res) => {
+    try {
+        const { name, phone, email, make, model, year, spec, transmission, color1, color2, budget, extraNotes } = req.body;
+        if (!name || !make || !model) return res.status(400).json({ error: "Name, make, and model are required" });
+
+        const order = await new PreOrder({
+            name, phone: phone || null, email: email || null,
+            make: make.trim(), model: model.trim(),
+            year: year || null, spec: spec || null,
+            transmission: transmission || null,
+            color1: color1 || null, color2: color2 || null,
+            budget: budget || null, extraNotes: extraNotes || null,
+            status: 'new'
+        }).save();
+
+        res.status(201).json({ success: true, id: order._id });
+    } catch (err) {
+        console.error('❌ PRE-ORDER:', err.message);
+        res.status(500).json({ error: "Failed to submit pre-order" });
+    }
+});
+
+// Admin — list all pre-orders
+app.get('/api/preorders', requireAdmin, async (req, res) => {
+    try {
+        const orders = await PreOrder.find().sort({ createdAt: -1 });
+        res.json(orders.map(preOrderOut));
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch pre-orders" });
+    }
+});
+
+// Admin — get single pre-order
+app.get('/api/preorders/:id', requireAdmin, async (req, res) => {
+    try {
+        const order = await PreOrder.findById(req.params.id);
+        if (!order) return res.status(404).json({ error: "Not found" });
+        res.json(preOrderOut(order));
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch pre-order" });
+    }
+});
+
+// Admin — update status (new → contacted → fulfilled)
+app.put('/api/preorders/:id/status', requireAdmin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const allowed = ['new', 'contacted', 'fulfilled'];
+        if (!allowed.includes(status)) return res.status(400).json({ error: "Invalid status" });
+
+        await PreOrder.findByIdAndUpdate(req.params.id, { status });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update pre-order status" });
+    }
+});
+
+// Admin — delete pre-order
+app.delete('/api/preorders/:id', requireAdmin, async (req, res) => {
+    try {
+        await PreOrder.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete pre-order" });
+    }
+});
+
+// =======================
 // ANALYTICS
 // =======================
 app.get('/api/analytics/enquiries-per-day', requireAdmin, async (req, res) => {
@@ -482,6 +571,12 @@ app.get('/admin/dashboard', requireAdminPage, (req, res) => {
 app.get('/admin/enquiries', requireAdminPage, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'que.html'));
 });
+
+// ── Pre-orders page route ──────────────────────────────────
+app.get('/admin/preorders', requireAdminPage, (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin', 'preorders.html'));
+});
+// ─────────────────────────────────────────────────────────
 
 app.use('/admin', requireAdminPage, express.static(path.join(__dirname, 'admin')));
 
